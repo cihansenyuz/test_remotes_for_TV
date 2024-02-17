@@ -1,113 +1,69 @@
 import RPi.GPIO as GPIO
 import time
 
-inputPin = 3
+inputPin = 12
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(inputPin, GPIO.IN)
+GPIO.add_event_detect(inputPin, GPIO.FALLING)
 
-flag = 0
-startTime = 0
-endTime = 0
-flagStart = 0
-startTimeStart = 0
-endTimeStart = 0
-first_time = 0
-second_time = 0
-start = 0
-x = 0
-checkpoint = 0
+headerStartTime = 0
+headerEndTime = 0
+dataEndTime = 0
+firstBitflag = 0
+bitCounter = 0
 
-def fallingEdgeStart():
-	global flagStart
-	global startTimeStart
-	global endTimeStart
-	if flagStart == 0:
-		startTimeStart = time.time()
-		flagStart = 1
-	else:
-		endTimeStart = time.time()
-
-def startCheck():
-    GPIO.add_event_detect(inputPin, GPIO.FALLING)
+def waitForHeaderBits():
+    global headerStartTime 
+    global headerEndTime
     while 1:
         if GPIO.event_detected(inputPin):
-            fallingEdgeStart()
+            headerStartTime = time.perf_counter_ns()
             break
         else:
             pass
-    print("1st edge detected!")
-
     while 1:
         if GPIO.event_detected(inputPin):
-            fallingEdgeStart()
+            headerEndTime = time.perf_counter_ns()
             break
         else:
             pass
-    print("2nd edge detected!")
-    print((endTimeStart-startTimeStart)*1000)
-    return (endTimeStart-startTimeStart)*1000
+    result = (headerEndTime-headerStartTime)/1000000
+    print(f"Header durition: {result:.2f} ms")
+    return result
 
-def risingEdge():
-    global startTime
-    global endTime
-    global checkpoint
-    if checkpoint == 0:
-        startTime = time.time()
-        checkpoint = 1
-    elif checkpoint == 1:
-        endTime = time.time()
-        checkpoint = 2
-    elif checkpoint == 2:
-        startTime = endTime
-        endTime = time.time()
+def getPulseWidth():
+    global flag
+    global headerEndTime
+    global dataEndTime
+    if firstBitflag == 0:
+        dataStartTime = headerEndTime
+        dataEndTime = time.perf_counter_ns()
+        firstBitflag = 1
+    elif firstBitflag == 1:
+        dataStartTime = dataEndTime
+        dataEndTime = time.perf_counter_ns()
+    return (dataEndTime-dataStartTime)/1000000
 
 def bitCheck():
-    while 1:
-        if GPIO.event_detected(inputPin):
-            risingEdge()
-            break
-        else:
-            pass
-
-    while 1:
-        if GPIO.event_detected(inputPin):
-            risingEdge()
-            break
-        else:
-            pass
-    
-    return (endTime-startTime)*1000
-
-def header():
-    while 1:
-        if GPIO.event_detected(inputPin):
-            risingEdge()
-            break
-        else:
-            pass
-    return (endTime-startTime)*1000
-
-try:
-    counter = 0   
-    difference = startCheck()
-    
-    if difference > 7.9 and difference < 8.2:
-        GPIO.remove_event_detect(inputPin)
-        GPIO.add_event_detect(inputPin, GPIO.RISING)
-        
-        time_diff = bitCheck()
-        print(f"{counter} Time between first rising and second rising edge: ", time_diff)
-        counter += 1
-        while counter < 31:
-            time_diff = header()
-            print(f"{counter} Time between first rising and second rising edge: ", time_diff)
-            counter += 1
-
+    dataWidth = 0
+    GPIO.wait_for_edge(inputPin, GPIO.FALLING)
+    dataWidth = getPulseWidth()
+    print(f"Bit {bitCounter} durition: ", round(dataWidth, 2), " ms")
+    if dataWidth > 2:
+        return 1
     else:
-        print("Please try again!")
+        return 0
+
+try:   
+    headerTimeDifference = waitForHeaderBits()
+    if headerTimeDifference > 7.9 and headerTimeDifference < 8.1:
+        while bitCounter < 24:
+            dataBit = bitCheck()
+            print(f"Bit {bitCounter} is: ", dataBit)
+            bitCounter += 1
+    GPIO.cleanup()
 
 except KeyboardInterrupt:
     GPIO.cleanup()
     print("\nProgram terminated by user\n")
     exit(0)
-    
