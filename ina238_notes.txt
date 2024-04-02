@@ -1,0 +1,2 @@
+// link for the datasheet
+ti.com/lit/ds/symlink/ina238.pdf
