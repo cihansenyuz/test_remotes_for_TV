@@ -1,11 +1,6 @@
 import smbus2 as smbus
 import time as time
 
-BUS_NUMBER = 1          # board pin3 & pin5 is on I2C1
-DEVICE_ADRESS = 0x40    # slave device adress
-SHUNT_RES = 0.022
-MAX_CURRENT = 0.05
-
 DEVICE_ID = 0x3F        # slave device ID register
 CONFIG = 0x00           # Configuration (CONFIG) Register
 ADC_CONFIG = 0x01       # ADC Configuration (ADC_CONFIG) Register
@@ -14,15 +9,6 @@ VBUS = 0x05             # Bus Voltage Measurement
 DIETEMP = 0x06          # Temperature Measurement (DIETEMP) Register
 CURRENT = 0x07          # Current result
 POWER = 0x08            # Power result
-
-'''
-Reverses byte order to match INA238 transaction format
-'''
-def reverseWord(oldWord):
-    newWord = oldWord & 0x00FF    # mask MSByte of oldWord    
-    newWord = newWord << 8        # shift LSByte of newWord to MSByte   
-    newWord |= (oldWord >> 8)     # shift MSByte of oldWord to LSByte and OR it to newWord
-    return newWord 
 
 class Ina238:
     def __init__(self, addr, busNum):
@@ -37,19 +23,28 @@ class Ina238:
                     ^system reset
         '''
         # do a system reset
-        self.bus.write_word_data(DEVICE_ADRESS, CONFIG, reverseWord(0x8000)) # system reset
+        self.bus.write_word_data(addr, CONFIG, self.reverseWord(0x8000)) # system reset
         
         # set ADC conversion delay
         word = self.get16bitData(CONFIG)
         word &= (0xC07F << 6)   # clear bits 13-6
         word |= 0x40            # set ADC conversion delay to 2ms
-        self.bus.write_word_data(DEVICE_ADRESS, CONFIG, reverseWord(word))
+        self.bus.write_word_data(addr, CONFIG, self.reverseWord(word))
         
         # set ADC averaging
         word = self.get16bitData(ADC_CONFIG)
         word &= (0xFFF8)    # clear bits 3-0
         word |= 0x03        # set ADC averaging to 64
-        self.bus.write_word_data(DEVICE_ADRESS, CONFIG, reverseWord(word))
+        self.bus.write_word_data(addr, CONFIG, self.reverseWord(word))
+
+    '''
+    Reverses byte order to match INA238 transaction format
+    '''
+    def reverseWord(oldWord):
+        newWord = oldWord & 0x00FF    # mask MSByte of oldWord    
+        newWord = newWord << 8        # shift LSByte of newWord to MSByte   
+        newWord |= (oldWord >> 8)     # shift MSByte of oldWord to LSByte and OR it to newWord
+        return newWord
 
     def get16bitData(self, reg):
         '''
@@ -57,7 +52,7 @@ class Ina238:
         and register 'reg' to be read. Performs bitwise operations to arrange byte order
         returns integer value of the word.
         '''
-        word = reverseWord(self.bus.read_word_data(self.addr, reg))
+        word = self.reverseWord(self.bus.read_word_data(self.addr, reg))
         return word
     
     def setShuntCal(self, res, maxCur):
@@ -77,7 +72,7 @@ class Ina238:
             factor *= 10
         self.current_lsb = 10 / factor
         shunt_cal_value = round(819200000 * self.current_lsb * res)
-        self.bus.write_word_data(self.addr, SHUNT_CAL, reverseWord(shunt_cal_value))
+        self.bus.write_word_data(self.addr, SHUNT_CAL, self.reverseWord(shunt_cal_value))
 
     # get Device ID
     def deviceID(self):
@@ -101,11 +96,3 @@ class Ina238:
         time.sleep(0.05)
         word = self.get16bitData(CURRENT)
         print("Current: {:.{}f}".format(word*self.current_lsb*1000, 3), 'mA')
-
-ina = Ina238(DEVICE_ADRESS, BUS_NUMBER)
-ina.setShuntCal(SHUNT_RES, MAX_CURRENT)
-
-ina.deviceID()
-ina.temprature()
-ina.voltage()
-ina.current()
