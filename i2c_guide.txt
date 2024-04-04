@@ -1,0 +1,17 @@
+// to enable i2c of rpi
+1-  $ sudo raspi-config
+2-  go to interface options
+3-  enable i2c
+4-  go down and enter finish to exit config
+
+// i2c tools need to be installed
+$ sudo apt-get install i2c-tools
+
+// to check if bus is working
+1-  connect a device to sda/scl and power up(dont forget common gnd)
+2-  $ i2cdetect -y 1
+3-  will echo of all adresses and show connected device adresses
+
+// other necessary installs
+$ sudo apt-get install libi2c-dev
+$ sudo pip3 install smbus2
