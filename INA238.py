@@ -40,7 +40,7 @@ class Ina238:
     '''
     Reverses byte order to match INA238 transaction format
     '''
-    def reverseWord(oldWord):
+    def reverseWord(self, oldWord):
         newWord = oldWord & 0x00FF    # mask MSByte of oldWord    
         newWord = newWord << 8        # shift LSByte of newWord to MSByte   
         newWord |= (oldWord >> 8)     # shift MSByte of oldWord to LSByte and OR it to newWord
@@ -89,10 +89,15 @@ class Ina238:
     def voltage(self):
         time.sleep(0.05)
         word = self.get16bitData(VBUS)
-        print("Bus Voltage: {:.{}f}".format(word*0.003125, 2), 'V')
+        batVoltage = word*0.003125
+        print("Bus Voltage: {:.{}f}".format(batVoltage, 2), 'V')
+        return round(batVoltage, 2)
 
     # get Current
     def current(self):
         time.sleep(0.05)
         word = self.get16bitData(CURRENT)
-        print("Current: {:.{}f}".format(word*self.current_lsb*1000, 3), 'mA')
+        current = word*self.current_lsb*1000
+        print("Current: {:.{}f}".format(current, 2), 'mA')
+        return round(current, 2)
+
