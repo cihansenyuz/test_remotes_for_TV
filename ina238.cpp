@@ -15,7 +15,8 @@ Ina238::Ina238(uint8_t addr, int busNum) {
     // do a system reset
     writeWordData(fd, CONFIG, 0x8000);
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    deviceID();
+    if(!checkDevice());
+        return;
 
     uint16_t word = getWordData(ADC_CONFIG);
     word &= 0xFF8;     // clear bits 2-0 & 15-12
@@ -52,9 +53,21 @@ void Ina238::setShuntCal(double res, double maxCur) {
     writeWordData(fd, SHUNT_CAL, shuntCalValue);
 }
 
+bool Ina238::checkDevice() {
+    uint16_t word = getWordData(DEVICE_ID);
+    if(word == 0x2381){
+        std::cout << "Device is ready" << std::endl;
+        return true;
+    }
+    else{
+        std::cerr << "Device is not responding!" << std::endl;
+        return false;
+    }
+}
+
 void Ina238::deviceID() {
     uint16_t word = getWordData(DEVICE_ID);
-    std::cout << "Device ID: 0x" << std::hex << word << " is ready" << std::endl;
+    std::cout << "Device ID: 0x" << std::hex << word << std::endl;
 }
 
 void Ina238::temperature() {

@@ -1,23 +1,36 @@
 #include "ina238.h"
+#include <wiringPi.h>
 
 #define DEVICE_ADDRESS 0x40
 #define BUS_NUMBER 1
 #define SHUNT_RESISTANCE 0.022
 #define MAX_CURRENT 0.05
 
+const int irPin = 0;
+bool flag = true;
+
+void gpoiIntHandler(){
+    flag = false;
+}
+
 int main (int argc, char **argv){
 
     Ina238 device(DEVICE_ADDRESS, BUS_NUMBER);
     device.setShuntCal(SHUNT_RESISTANCE, MAX_CURRENT);
     
-    /*float sum = 0;
-    for(int i=0; i<128; i++)
-        sum += device.current();
+    if(wiringPiSetup())
+        std::cerr << "wiringPi setup fail" << std::endl;
 
-    std::cout << "average: " << sum/128 << std::endl;*/
+    pinMode(irPin, INPUT);
+    pullUpDnControl(irPin, PUD_DOWN);
 
-    device.current();
-    device.current();
+    std::cout << digitalRead(irPin);
+
+    wiringPiISR(irPin, INT_EDGE_FALLING, &gpoiIntHandler);
+
+    while(flag)
+    {}
+
     device.current();
     return 0;
 }
