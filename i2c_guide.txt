@@ -15,3 +15,7 @@ $ sudo apt-get install i2c-tools
 // other necessary installs
 $ sudo apt-get install libi2c-dev
 $ sudo pip3 install smbus2
+
+------------------------------------------------
+$ ls /dev/*i2c*
+/dev/i2c-1  /dev/i2c-20  /dev/i2c-21
