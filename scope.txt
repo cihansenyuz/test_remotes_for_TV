@@ -1,0 +1,5 @@
+1 - motor basma hareketi başlangıcı ile IR recivever datası arası 250 ms
+2 - motor basma hareketi bitişi ile kalkma haraketi başlangıcı arası 150 ms
+yani tuş bu kadar süre basılı kalıyor. insan basışı kaç ms?
+3 - ölçüm penceresi
+4 - 45 ms tuş basma fonksiyonundan çıktıktan sonra INA haberleşmeye kadar
