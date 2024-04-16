@@ -1,8 +1,6 @@
 #include "irManager.hpp"
 
 IrManager::IrManager(int irPin){
-    if(wiringPiSetup())
-        std::cerr << "wiringPi setup fail" << std::endl;
     pinMode(irPin, INPUT);
     pullUpDnControl(irPin, PUD_DOWN);
     wiringPiISR(irPin, INT_EDGE_FALLING, &gpoiIntHandler);
