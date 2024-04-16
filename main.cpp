@@ -1,35 +1,31 @@
-#include "main.h"
+#include "main.hpp"
 
 Ina238 *device;
-const int irPin = 0;
-bool flag = true;
+IrManager *irManager;
+bool data[24];
 
 int main (int argc, char **argv)
 {
-    setup();
+    setupModules();
     
-    std::cout << digitalRead(irPin) << std::endl;
-    wiringPiISR(irPin, INT_EDGE_FALLING, &gpoiIntHandler);
+    int headerDurition = irManager->waitForHeaderBits();
+    if(headerDurition > 7900 && headerDurition < 8100){
+        for(int i=0; i<24; i++){
+            data[i] = irManager->readBit();
+        }
+    }
 
-    while(flag)
-    {}
-
-    device->current();
+    for(auto bit : data)
+        std::cout << bit << " ";
 
     delete device;
+    delete irManager;
     return 0;
 }
 
-void gpoiIntHandler(){
-    flag = false;
-}
-
-void setup(){
+void setupModules(){
     device = new Ina238(DEVICE_ADDRESS, BUS_NUMBER);
     device->setShuntCal(SHUNT_RESISTANCE, MAX_CURRENT);
 
-    if(wiringPiSetup())
-        std::cerr << "wiringPi setup fail" << std::endl;
-    pinMode(irPin, INPUT);
-    pullUpDnControl(irPin, PUD_DOWN);
+    irManager = new IrManager(IR_PIN);
 }

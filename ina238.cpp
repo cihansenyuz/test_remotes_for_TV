@@ -1,4 +1,4 @@
-# include "ina238.h"
+# include "ina238.hpp"
 
 Ina238::Ina238(uint8_t addr, int busNum) {
     fd = wiringPiI2CSetup(addr);
