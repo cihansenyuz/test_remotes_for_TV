@@ -1,23 +1,31 @@
-#include "ina238.h"
+#include "main.hpp"
 
-#define DEVICE_ADDRESS 0x40
-#define BUS_NUMBER 1
-#define SHUNT_RESISTANCE 0.022
-#define MAX_CURRENT 0.05
+Ina238 *device;
+IrManager *irManager;
+bool data[24];
 
-int main (int argc, char **argv){
-
-    Ina238 device(DEVICE_ADDRESS, BUS_NUMBER);
-    device.setShuntCal(SHUNT_RESISTANCE, MAX_CURRENT);
+int main (int argc, char **argv)
+{
+    setupModules();
     
-    /*float sum = 0;
-    for(int i=0; i<128; i++)
-        sum += device.current();
+    int headerDurition = irManager->waitForHeaderBits();
+    if(headerDurition > 7900 && headerDurition < 8100){
+        for(int i=0; i<24; i++){
+            data[i] = irManager->readBit();
+        }
+    }
 
-    std::cout << "average: " << sum/128 << std::endl;*/
+    for(auto bit : data)
+        std::cout << bit << " ";
 
-    device.current();
-    device.current();
-    device.current();
+    delete device;
+    delete irManager;
     return 0;
+}
+
+void setupModules(){
+    device = new Ina238(DEVICE_ADDRESS, BUS_NUMBER);
+    device->setShuntCal(SHUNT_RESISTANCE, MAX_CURRENT);
+
+    irManager = new IrManager(IR_PIN);
 }
