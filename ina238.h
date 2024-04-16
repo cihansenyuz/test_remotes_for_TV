@@ -22,6 +22,7 @@ public:
     void writeWordData(int fd, uint8_t reg, uint16_t data);
     void setShuntCal(double res, double maxCur);
     uint16_t reverseWord(uint16_t oldWord);
+    bool checkDevice();
     void deviceID();
     void temperature();
     float voltage();
