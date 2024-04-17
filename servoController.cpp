@@ -9,22 +9,21 @@ ServoController::ServoController(int _servoPin) : servoPin(_servoPin) {
     pwmSetRange(1000);
     
     releaseButton();
-    delay(80);
+    delay(65);
 }
 
 void ServoController::pressButton(){
     pwmWrite(servoPin, 22);
-    delay(100);
+    delay(65);
 }
 
 void ServoController::releaseButton(){
-    pwmWrite(servoPin, 30);   // %3 duty cycle
-    delay(80);
+    pwmWrite(servoPin, 25);
 }
 
 void ServoController::setPosition(int pos){
     pwmWrite(servoPin, pos);
-    delay(80);
+    delay(65);
 }
 
 ServoController::~ServoController(){
