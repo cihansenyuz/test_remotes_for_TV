@@ -11,7 +11,7 @@
 #define IR_PIN 0        // wiringPi pin number
 #define SERVO_PIN 23    // wiringPi pin number
 
-#define TOTAL_TEST_NO 20
+#define TOTAL_TEST_NO 100
 
 void setupModules();
 

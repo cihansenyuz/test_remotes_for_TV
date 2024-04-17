@@ -9,12 +9,14 @@ IrManager::IrManager(int irPin){
 }
 
 int IrManager::waitForHeaderBits(){
-    while(digitalRead(irPin) == LOW){} // wait for high signal
-    while(digitalRead(irPin) == HIGH){} // wait for low signal
-    auto headerStartTime = std::chrono::high_resolution_clock::now();
     
     while(digitalRead(irPin) == LOW){} // wait for high signal
     while(digitalRead(irPin) == HIGH){} // wait for low signal
+    auto headerStartTime = std::chrono::high_resolution_clock::now();
+
+    while(digitalRead(irPin) == LOW){} // wait for high signal
+    while(digitalRead(irPin) == HIGH
+            && (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - headerStartTime)).count() < 50000){} // wait for low signal
     auto headerEndTime = std::chrono::high_resolution_clock::now();
 
     auto result = std::chrono::duration_cast<std::chrono::microseconds>(headerEndTime - headerStartTime);
@@ -25,7 +27,8 @@ int IrManager::waitForHeaderBits(){
 int IrManager::readBit(){
     while(digitalRead(irPin) == LOW){} // wait for high signal
     auto dataStartTime = std::chrono::high_resolution_clock::now();
-    while(digitalRead(irPin) == HIGH){} // wait for low signal
+    while(digitalRead(irPin) == HIGH
+    && (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - dataStartTime)).count() < 50000){} // wait for low signal
     auto dataEndTime = std::chrono::high_resolution_clock::now();
     
     auto width = std::chrono::duration_cast<std::chrono::microseconds>(dataEndTime - dataStartTime);
@@ -34,7 +37,7 @@ int IrManager::readBit(){
     else if(1700 < width.count() && width.count() < 2300)
         return 1;
     else{
-        //std::cerr << "Absurd bit width: " << width.count() << std::endl; 
+        std::cerr << "Absurd bit width: " << width.count() << std::endl; 
         return -1;
     }
 }

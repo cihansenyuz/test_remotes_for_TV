@@ -8,6 +8,7 @@ int main (int argc, char **argv)
 {
     int data[24];
     int headerDurition = 0;
+    short errorCounter = 0;
     setupModules();
 
     for(int testNo=1; testNo <= TOTAL_TEST_NO; testNo++)
@@ -25,16 +26,26 @@ int main (int argc, char **argv)
                 //if(data[i] == -1)
                 //   std::cerr << " bit no: " << i << std::endl;
             }
-            if(irManager->checkPowerKey(data))
+            if(irManager->checkPowerKey(data)){
                 std::cout << "Data correct: ";
-            else
+                errorCounter = 0;
+            }
+            else{
                 std::cout << "!!! Data NOT correct: ";
+                errorCounter++;
+            }
             for(auto bit : data)
                 std::cout << bit << " ";
             std::cout << std::endl;
         }
-        else
+        else if(errorCounter == 3){
+            std::cout << "test terminated...\n";
+            break;
+        }
+        else{
             std::cout << "could not catch the header\n";
+            errorCounter++;
+        }
     }
 
     delete sensor;
