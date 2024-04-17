@@ -4,8 +4,10 @@ class ServoController
 {
 public:
     ServoController(int _servoPin);
-    void pushButton();
+    ~ServoController();
+    void pressButton();
     void releaseButton();
+    void setPosition(int pos);
 private:
     int servoPin;
 };
