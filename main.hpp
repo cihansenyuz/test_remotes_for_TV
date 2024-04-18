@@ -2,6 +2,7 @@
 #include "irManager.hpp"
 #include "servoController.hpp"
 #include <wiringPi.h>
+#include <stdio.h>
 
 #define DEVICE_ADDRESS 0x40
 #define BUS_NUMBER 1
@@ -10,8 +11,9 @@
 
 #define IR_PIN 0        // wiringPi pin number
 #define SERVO_PIN 23    // wiringPi pin number
+#define RELAY_PIN 25    // wiringPi pin number
 
 #define TOTAL_TEST_NO 100
 
-void setupModules();
-
+void setupTest();
+void connectAndSenseVoltage();
