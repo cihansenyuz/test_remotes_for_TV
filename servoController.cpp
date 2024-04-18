@@ -13,12 +13,12 @@ ServoController::ServoController(int _servoPin) : servoPin(_servoPin) {
 }
 
 void ServoController::pressButton(){
-    pwmWrite(servoPin, 22);
+    pwmWrite(servoPin, 18);
     delay(65);
 }
 
 void ServoController::releaseButton(){
-    pwmWrite(servoPin, 25);
+    pwmWrite(servoPin, 22);
 }
 
 void ServoController::setPosition(int pos){

@@ -79,7 +79,7 @@ void Ina238::temperature() {
 float Ina238::voltage() {
     uint16_t word = getWordData(VBUS);
     float batVoltage = static_cast<float>(word) * 0.003125f;
-    std::cout << "Bus Voltage: " << batVoltage << " V" << std::endl;
+    printf("Bus Voltage: %.2f V\n", batVoltage);
     return batVoltage;
 }
 
