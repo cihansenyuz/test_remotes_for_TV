@@ -1,59 +1,50 @@
 #include "irManager.hpp"
 
-using namespace std::chrono;
-//bool IrManager::edgeFlag = true;
+bool IrManager::edgeFlag = true;
 
 IrManager::IrManager(int irPin){
     pinMode(irPin, INPUT);
-    pullUpDnControl(irPin, PUD_UP);
-   //wiringPiISR(irPin, INT_EDGE_FALLING, &gpoiIntHandler);
+    pullUpDnControl(irPin, PUD_DOWN);
+    wiringPiISR(irPin, INT_EDGE_FALLING, &gpoiIntHandler);
 }
 
 int IrManager::waitForHeaderBits(){
+    while(digitalRead(irPin) == LOW){} // wait for high pulse which is idle bus
     waitForEdge();
     auto headerStartTime = high_resolution_clock::now();
-
     waitForEdge();
     auto headerEndTime = high_resolution_clock::now();
 
     auto result = duration_cast<microseconds>(headerEndTime - headerStartTime);
-    //std::cout << "Header durition: " << result.count() << std::endl;
+    std::cout << "Header durition: " << result.count() << std::endl;
     return result.count();
 }
 
-int IrManager::readBit(){
-    while(digitalRead(irPin) == LOW){}
+bool IrManager::readBit(){
+    while(digitalRead(irPin) == LOW){} // wait for high pulse which is the start of the bit
     auto dataStartTime = high_resolution_clock::now();
-
-    while(digitalRead(irPin) == HIGH
-            && (duration_cast<microseconds>(high_resolution_clock::now() - dataStartTime)).count()
-            < 350000){}
+    waitForEdge();
     auto dataEndTime = high_resolution_clock::now();
     
     auto width = duration_cast<microseconds>(dataEndTime - dataStartTime);
-    if(700 < width.count() && width.count() <= 1300)
-        return 0;
-    else if(1700 < width.count() && width.count() < 2300)
-        return 1;
-    else{
-        //std::cerr << "Absurd bit width: " << width.count() << std::endl; 
-        return -1;
-    }
+    if(width.count() < 1500)
+        return BIT0;
+    else
+        return BIT1;
 }
-/*
+
 void gpoiIntHandler(){
     IrManager::edgeFlag = false;
-}*/
+}
 
 void IrManager::waitForEdge(){
     auto timeOut = high_resolution_clock::now();
-    while(digitalRead(irPin) == LOW){}
-    while(digitalRead(irPin) == HIGH &&
-            (duration_cast<microseconds>(high_resolution_clock::now() - timeOut)).count()
-            < 350000){}
+    while(edgeFlag && (duration_cast<microseconds>(high_resolution_clock::now()
+                        - timeOut)).count() < MAX_REMOTE_LATE_RESPONSE){}
+    edgeFlag = true;    // reset the flag
 }
 
-bool IrManager::checkPowerKey(int* data, int size){
+bool IrManager::checkPowerKey(bool* data, int size){
     for(int i=0; i<size; i++){
         if(data[i] != powerKey[i])
             return false;
@@ -62,5 +53,5 @@ bool IrManager::checkPowerKey(int* data, int size){
 }
 
 IrManager::~IrManager(){
-    //wiringPiISRStop(irPin);
+    wiringPiISRStop(irPin);
 }

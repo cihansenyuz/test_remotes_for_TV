@@ -6,7 +6,7 @@ ServoController *servoController;
 
 int main (int argc, char **argv)
 {
-    int data[IR_DATA_SIZE];
+    bool data[IR_DATA_SIZE];
     float voltage[TOTAL_VOLTAGE_MEASUREMENTS];
     int headerDurition = 0;
     short totalErrorHeader = 0;
@@ -41,9 +41,9 @@ int main (int argc, char **argv)
             }
         }
         else if((consecutiveErrorHeader + consecutiveErrorData) == 3){
-            std::cout << "Test terminated... Total test: " << testNo << ", Total error: " << totalErrorHeader + totalErrorData
-                                                                     << " (" << totalErrorHeader << " header, "
-                                                                     << " " << totalErrorData << " data)" << std::endl;
+            std::cout << "Test terminated... Total test: " << testNo-1 << ", Total error: " << totalErrorHeader + totalErrorData
+                                                                       << " (" << totalErrorHeader << " header, "
+                                                                       << " " << totalErrorData << " data)" << std::endl;
             break;
         }
         else{
