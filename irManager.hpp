@@ -12,7 +12,7 @@ public:
     void waitForEdge();
     int waitForHeaderBits();
     int readBit();
-    bool checkPowerKey(int* data);
+    bool checkPowerKey(int* data, int size);
     //static bool edgeFlag;
 private:
     bool firstBitflag;
