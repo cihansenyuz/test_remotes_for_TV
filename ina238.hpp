@@ -1,3 +1,22 @@
+/**
+  ******************************************************************************
+  * @file    ina238.hpp
+  * @authors Cihan Senyuz
+  * @date    20.05.2023
+  * @brief   Header for ina238.cpp file.
+  *                 This file contains the common defines of the Ina238 class.
+  *          The Ina238 class is used to manage INA238 Power Monitor, read the
+  *          current and voltage values. SetShuntCal function may need to be
+  *          fine tuned.
+  *          This header depends on the wiringPi library.
+  *                 
+  * 
+  ******************************************************************************
+  */
+
+#ifndef INA238_HPP
+#define INA238_HPP
+
 #include <iostream>
 #include <cmath>
 #include <wiringPiI2C.h>
@@ -33,3 +52,5 @@ private:
     uint8_t m_addr;
     double m_currentLsb;
 };
+
+#endif // INA238_HPP
