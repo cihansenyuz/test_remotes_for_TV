@@ -6,53 +6,62 @@ ServoController *servoController;
 
 int main (int argc, char **argv)
 {
-    int data[24];
+    int data[IR_DATA_SIZE];
+    float voltage[TOTAL_VOLTAGE_MEASUREMENTS];
     int headerDurition = 0;
-    short errorCounter = 0;
-    short errorTotal = 0;
+    short totalErrorHeader = 0;
+    short totalErrorData = 0;
+    short consecutiveErrorHeader = 0;
+    short consecutiveErrorData = 0;
+
     setupTest();
-    connectAndSenseVoltage();
+    voltage[0] = connectAndSenseVoltage();
 
     for(int testNo=1; testNo <= TOTAL_TEST_NO; testNo++)
     {
-        std::cout << "\n--- #" << testNo << " test----\n";
-        delay(1000);
+        std::cout << "--- #" << testNo << " test----\n";
+        delay(500);
         servoController->pressButton();
-        //sensor->current();
         servoController->releaseButton();
         headerDurition = irManager->waitForHeaderBits();
 
-        if(headerDurition > 7800 && headerDurition < 8200){
-            for(int i=0; i<24; i++){
+        if(headerDurition > MIN_HEADER_DURATION && headerDurition < MAX_HEADER_DURATION){
+            for(int i=0; i<IR_DATA_SIZE; i++){
                 data[i] = irManager->readBit();
-                //if(data[i] == -1)
-                //   std::cerr << " bit no: " << i << std::endl;
             }
-            if(irManager->checkPowerKey(data)){
-                std::cout << "Data correct: ";
-                errorCounter = 0;
+            if(irManager->checkPowerKey(data, IR_DATA_SIZE)){
+                consecutiveErrorHeader = 0;
+                consecutiveErrorData = 0;
             }
             else{
-                std::cout << "!!! Data NOT correct: ";
-                errorCounter++;
-                errorTotal++;
+                std::cout << "Data mismatch\n";
+                consecutiveErrorHeader = 0;
+                consecutiveErrorData++;
+                totalErrorData++;
             }
-            for(auto bit : data)
-                std::cout << bit << " ";
-            std::cout << std::endl;
         }
-        else if(errorCounter == 3){
-            std::cout << "test terminated...\n";
+        else if((consecutiveErrorHeader + consecutiveErrorData) == 3){
+            std::cout << "Test terminated... Total test: " << testNo << ", Total error: " << totalErrorHeader + totalErrorData
+                                                                     << " (" << totalErrorHeader << " header, "
+                                                                     << " " << totalErrorData << " data)" << std::endl;
             break;
         }
         else{
-            std::cout << "could not catch the header\n";
-            errorCounter++;
-            errorTotal++;
+            std::cout << "Could not catch the header\n";
+            consecutiveErrorHeader++;
+            totalErrorHeader++;
         }
+        if(testNo % 200 == 0)
+            voltage[testNo/200] = connectAndSenseVoltage();
     }
-    connectAndSenseVoltage();
-    std::cout << "Total Test: " << TOTAL_TEST_NO << ", Total error: " << errorTotal << std::endl;
+    if((consecutiveErrorHeader + consecutiveErrorData) < 3)
+        std::cout << "Total Test: " << TOTAL_TEST_NO << ", Total error: " << totalErrorHeader + totalErrorData
+                                                                     << " (" << totalErrorHeader << " header, "
+                                                                     << " " << totalErrorData << " data)" << std::endl;
+    std::cout << "Voltage values: \n";
+    for(auto v : voltage)
+        printf("%.2f\n", v);
+
     delete sensor;
     delete irManager;
     delete servoController;
@@ -73,9 +82,10 @@ void setupTest(){
     digitalWrite(RELAY_PIN, HIGH);
 }
 
-void connectAndSenseVoltage(){
+float connectAndSenseVoltage(){
     digitalWrite(RELAY_PIN, LOW);
     delay(50);
-    sensor->voltage();
+    float temp = sensor->voltage();
     digitalWrite(RELAY_PIN, HIGH);
+    return temp;
 }
