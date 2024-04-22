@@ -9,14 +9,13 @@ IrManager::IrManager(int irPin){
 }
 
 int IrManager::waitForHeaderBits(){
-    while(digitalRead(irPin) == LOW){} // wait for high pulse which is idle bus
     waitForEdge();
     auto headerStartTime = high_resolution_clock::now();
     waitForEdge();
     auto headerEndTime = high_resolution_clock::now();
 
     auto result = duration_cast<microseconds>(headerEndTime - headerStartTime);
-    //std::cout << "Header durition: " << result.count() << std::endl;
+    std::cout << "Header durition: " << result.count() << std::endl;
     return result.count();
 }
 

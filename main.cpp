@@ -20,8 +20,8 @@ int main (int argc, char **argv)
 
     for(int testNo=1; testNo <= TOTAL_TEST_NO; testNo++)
     {
-        std::cout << "--- #" << testNo << " test----\n";
-        delay(500);
+        //std::cout << "--- #" << testNo << " test----\n";
+        //delay(100);
         servoController->pressButton();
         servoController->releaseButton();
         headerDurition = irManager->waitForHeaderBits();
@@ -35,7 +35,7 @@ int main (int argc, char **argv)
                 consecutiveErrorData = 0;
             }
             else{
-                std::cout << "Data mismatch\n";
+                std::cout << "Data mismatch, test #" << testNo << std::endl;
                 consecutiveErrorHeader = 0;
                 consecutiveErrorData++;
                 totalErrorData++;
@@ -50,7 +50,7 @@ int main (int argc, char **argv)
             break;
         }
         else{
-            std::cout << "Could not catch the header\n";
+            std::cout << "Could not catch the header, test #" << testNo << std::endl;
             consecutiveErrorHeader++;
             totalErrorHeader++;
         }
@@ -92,6 +92,7 @@ float connectAndSenseVoltage(){
     delay(50);
     float temp = sensor->voltage();
     digitalWrite(RELAY_PIN, HIGH);
+    delay(50);
     return temp;
 }
 
