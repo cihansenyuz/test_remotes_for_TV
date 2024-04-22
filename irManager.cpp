@@ -16,7 +16,7 @@ int IrManager::waitForHeaderBits(){
     auto headerEndTime = high_resolution_clock::now();
 
     auto result = duration_cast<microseconds>(headerEndTime - headerStartTime);
-    std::cout << "Header durition: " << result.count() << std::endl;
+    //std::cout << "Header durition: " << result.count() << std::endl;
     return result.count();
 }
 

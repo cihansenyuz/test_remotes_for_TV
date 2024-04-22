@@ -1,9 +1,10 @@
 #include "ina238.hpp"
 #include "irManager.hpp"
 #include "servoController.hpp"
-#include "reportFile.hpp"
 #include <wiringPi.h>
 #include <stdio.h>
+#include <vector>
+#include <fstream>
 
 #define DEVICE_ADDRESS 0x40
 #define BUS_NUMBER 1
@@ -14,13 +15,11 @@
 #define SERVO_PIN 23    // wiringPi pin number
 #define RELAY_PIN 25    // wiringPi pin number
 
-#define TOTAL_TEST_NO 10
-//#define TOTAL_VOLTAGE_MEASUREMENTS 1   // TOTAL_TEST_NO / 200 + 1 // min 1
+#define TOTAL_TEST_NO 500000
 #define IR_DATA_SIZE 24
 #define MIN_HEADER_DURATION 7800
 #define MAX_HEADER_DURATION 8200
 
 void setupTest();
 float connectAndSenseVoltage();
-void measureAndSave();
-void save();
+void saveRecordedMesuremants(std::vector<float> &voltages);

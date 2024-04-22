@@ -4,11 +4,11 @@ Ina238 *sensor;
 IrManager *irManager;
 ServoController *servoController;
 
+
 int main (int argc, char **argv)
 {
     bool data[IR_DATA_SIZE];
-    //float voltage[TOTAL_VOLTAGE_MEASUREMENTS];
-    std::vector<float> voltages; 
+    std::vector<float> voltages;
     int headerDurition = 0;
     short totalErrorHeader = 0;
     short totalErrorData = 0;
@@ -16,7 +16,7 @@ int main (int argc, char **argv)
     short consecutiveErrorData = 0;
 
     setupTest();
-    voltages.at(0) = connectAndSenseVoltage();
+    voltages.push_back(connectAndSenseVoltage());
 
     for(int testNo=1; testNo <= TOTAL_TEST_NO; testNo++)
     {
@@ -45,6 +45,8 @@ int main (int argc, char **argv)
             std::cout << "Test terminated... Total test: " << testNo-1 << ", Total error: " << totalErrorHeader + totalErrorData
                                                                        << " (" << totalErrorHeader << " header, "
                                                                        << " " << totalErrorData << " data)" << std::endl;
+            voltages.push_back(connectAndSenseVoltage());
+            saveRecordedMesuremants(voltages);
             break;
         }
         else{
@@ -53,15 +55,17 @@ int main (int argc, char **argv)
             totalErrorHeader++;
         }
         
-        measureAndSave();
+        if(testNo % 200 == 0)
+            voltages.push_back(connectAndSenseVoltage());
+        
+        if(voltages.size() % 100 == 0)
+            saveRecordedMesuremants(voltages);
+
     }
     if((consecutiveErrorHeader + consecutiveErrorData) < 3)
         std::cout << "Total Test: " << TOTAL_TEST_NO << ", Total error: " << totalErrorHeader + totalErrorData
                                                                      << " (" << totalErrorHeader << " header, "
                                                                      << " " << totalErrorData << " data)" << std::endl;
-    std::cout << "Voltage values: \n";
-    for(auto v : voltage)
-        printf("%.2f\n", v);
 
     delete sensor;
     delete irManager;
@@ -91,14 +95,7 @@ float connectAndSenseVoltage(){
     return temp;
 }
 
-void measureAndSave() {
-    voltages.push_back(connectAndSenseVoltage());
-    if (voltages.size() % 200 == 0) {
-        save();
-    }
-}
-
-void save() {
+void saveRecordedMesuremants(std::vector<float> &voltages) {
         std::ofstream file("voltage_measurements.txt", std::ios::app);
         for (int i = 0; i < voltages.size(); i++) {
             file << voltages[i] << std::endl;
