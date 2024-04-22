@@ -3,12 +3,12 @@
 Ina238 *sensor;
 IrManager *irManager;
 ServoController *servoController;
-ReportFile *report;
 
 int main (int argc, char **argv)
 {
     bool data[IR_DATA_SIZE];
-    float voltage[TOTAL_VOLTAGE_MEASUREMENTS];
+    //float voltage[TOTAL_VOLTAGE_MEASUREMENTS];
+    std::vector<float> voltages; 
     int headerDurition = 0;
     short totalErrorHeader = 0;
     short totalErrorData = 0;
@@ -16,7 +16,7 @@ int main (int argc, char **argv)
     short consecutiveErrorData = 0;
 
     setupTest();
-    voltage[0] = connectAndSenseVoltage();
+    voltages.at(0) = connectAndSenseVoltage();
 
     for(int testNo=1; testNo <= TOTAL_TEST_NO; testNo++)
     {
@@ -52,8 +52,8 @@ int main (int argc, char **argv)
             consecutiveErrorHeader++;
             totalErrorHeader++;
         }
-        if(testNo % 200 == 0)
-            voltage[testNo/200] = connectAndSenseVoltage();
+        
+        measureAndSave();
     }
     if((consecutiveErrorHeader + consecutiveErrorData) < 3)
         std::cout << "Total Test: " << TOTAL_TEST_NO << ", Total error: " << totalErrorHeader + totalErrorData
@@ -62,12 +62,10 @@ int main (int argc, char **argv)
     std::cout << "Voltage values: \n";
     for(auto v : voltage)
         printf("%.2f\n", v);
-        report->measureAndSave(voltage);
 
     delete sensor;
     delete irManager;
     delete servoController;
-    delete report;
     return 0;
 }
 
@@ -79,7 +77,6 @@ void setupTest(){
     sensor->setShuntCal(SHUNT_RESISTANCE, MAX_CURRENT);
     irManager = new IrManager(IR_PIN);
     servoController = new ServoController(SERVO_PIN);
-    report = new ReportFile();
     
     // Relay setup
     pinMode(RELAY_PIN, OUTPUT);
@@ -92,4 +89,20 @@ float connectAndSenseVoltage(){
     float temp = sensor->voltage();
     digitalWrite(RELAY_PIN, HIGH);
     return temp;
+}
+
+void measureAndSave() {
+    voltages.push_back(connectAndSenseVoltage());
+    if (voltages.size() % 200 == 0) {
+        save();
+    }
+}
+
+void save() {
+        std::ofstream file("voltage_measurements.txt", std::ios::app);
+        for (int i = 0; i < voltages.size(); i++) {
+            file << voltages[i] << std::endl;
+        }
+        file.close();
+        voltages.clear();
 }

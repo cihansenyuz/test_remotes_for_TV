@@ -15,10 +15,12 @@
 #define RELAY_PIN 25    // wiringPi pin number
 
 #define TOTAL_TEST_NO 10
-#define TOTAL_VOLTAGE_MEASUREMENTS 1   // TOTAL_TEST_NO / 200 + 1 // min 1
+//#define TOTAL_VOLTAGE_MEASUREMENTS 1   // TOTAL_TEST_NO / 200 + 1 // min 1
 #define IR_DATA_SIZE 24
 #define MIN_HEADER_DURATION 7800
 #define MAX_HEADER_DURATION 8200
 
 void setupTest();
 float connectAndSenseVoltage();
+void measureAndSave();
+void save();
