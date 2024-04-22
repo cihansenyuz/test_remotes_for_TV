@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    irManager.hpp
   * @authors Cihan Senyuz, Hamdi Demircan Necli
-  * @date    20.05.2023
+  * @date    20.04.2024
   * @brief   Header for irManager.cpp file.
   *                 This file contains the common defines of the IrManager class.
   *          The IrManager class is used to manage the IR receiver module.

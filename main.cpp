@@ -3,6 +3,7 @@
 Ina238 *sensor;
 IrManager *irManager;
 ServoController *servoController;
+ReportFile *report;
 
 int main (int argc, char **argv)
 {
@@ -61,10 +62,12 @@ int main (int argc, char **argv)
     std::cout << "Voltage values: \n";
     for(auto v : voltage)
         printf("%.2f\n", v);
+        report->measureAndSave(voltage);
 
     delete sensor;
     delete irManager;
     delete servoController;
+    delete report;
     return 0;
 }
 
@@ -76,6 +79,7 @@ void setupTest(){
     sensor->setShuntCal(SHUNT_RESISTANCE, MAX_CURRENT);
     irManager = new IrManager(IR_PIN);
     servoController = new ServoController(SERVO_PIN);
+    report = new ReportFile();
     
     // Relay setup
     pinMode(RELAY_PIN, OUTPUT);

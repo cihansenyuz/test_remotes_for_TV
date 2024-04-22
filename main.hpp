@@ -1,6 +1,7 @@
 #include "ina238.hpp"
 #include "irManager.hpp"
 #include "servoController.hpp"
+#include "reportFile.hpp"
 #include <wiringPi.h>
 #include <stdio.h>
 

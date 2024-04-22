@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    ina238.hpp
   * @authors Cihan Senyuz
-  * @date    20.05.2023
+  * @date    20.04.2024
   * @brief   Header for ina238.cpp file.
   *                 This file contains the common defines of the Ina238 class.
   *          The Ina238 class is used to manage INA238 Power Monitor, read the
