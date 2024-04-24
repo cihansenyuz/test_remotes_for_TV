@@ -15,11 +15,11 @@
 #define SERVO_PIN 23    // wiringPi pin number
 #define RELAY_PIN 25    // wiringPi pin number
 
-#define TOTAL_TEST_NO 500000
+#define TOTAL_TEST_NO 10000
 #define IR_DATA_SIZE 24
 #define MIN_HEADER_DURATION 7800
 #define MAX_HEADER_DURATION 8200
 
 void setupTest();
 float connectAndSenseVoltage();
-void saveRecordedMesuremants(std::vector<float> &voltages);
+void saveRecordedMesuremants(std::vector<std::pair<int, float>>&);

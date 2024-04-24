@@ -8,7 +8,7 @@ ServoController *servoController;
 int main (int argc, char **argv)
 {
     bool data[IR_DATA_SIZE];
-    std::vector<float> voltages;
+    std::vector<std::pair<int, float>> testResults;
     int headerDurition = 0;
     short totalErrorHeader = 0;
     short totalErrorData = 0;
@@ -16,17 +16,24 @@ int main (int argc, char **argv)
     short consecutiveErrorData = 0;
 
     setupTest();
-    voltages.push_back(connectAndSenseVoltage());
+    testResults.push_back(std::make_pair(0, connectAndSenseVoltage()));
 
     for(int testNo=1; testNo <= TOTAL_TEST_NO; testNo++)
     {
-        //std::cout << "--- #" << testNo << " test----\n";
-        //delay(100);
         servoController->pressButton();
         servoController->releaseButton();
-        headerDurition = irManager->waitForHeaderBits();
 
-        if(headerDurition > MIN_HEADER_DURATION && headerDurition < MAX_HEADER_DURATION){
+        headerDurition = irManager->waitForHeaderBits();
+        
+        if((consecutiveErrorHeader + consecutiveErrorData) == 3){
+            std::cout << "Test terminated... Total test: " << testNo-1 << ", Total error: " << totalErrorHeader + totalErrorData
+                                                                       << " (" << totalErrorHeader << " header, "
+                                                                       << " " << totalErrorData << " data)" << std::endl;
+            testResults.push_back(std::make_pair(testNo, connectAndSenseVoltage()));
+            saveRecordedMesuremants(testResults);
+            break;
+        }
+        else if(headerDurition > MIN_HEADER_DURATION && headerDurition < MAX_HEADER_DURATION){
             for(int i=0; i<IR_DATA_SIZE; i++){
                 data[i] = irManager->readBit();
             }
@@ -41,31 +48,26 @@ int main (int argc, char **argv)
                 totalErrorData++;
             }
         }
-        else if((consecutiveErrorHeader + consecutiveErrorData) == 3){
-            std::cout << "Test terminated... Total test: " << testNo-1 << ", Total error: " << totalErrorHeader + totalErrorData
-                                                                       << " (" << totalErrorHeader << " header, "
-                                                                       << " " << totalErrorData << " data)" << std::endl;
-            voltages.push_back(connectAndSenseVoltage());
-            saveRecordedMesuremants(voltages);
-            break;
-        }
         else{
             std::cout << "Could not catch the header, test #" << testNo << std::endl;
             consecutiveErrorHeader++;
             totalErrorHeader++;
         }
-        
-        if(testNo % 200 == 0)
-            voltages.push_back(connectAndSenseVoltage());
-        
-        if(voltages.size() % 100 == 0)
-            saveRecordedMesuremants(voltages);
+
+        if(testNo % 200 == 0){
+            std::cout << "Test #" << testNo << ", ";
+            testResults.push_back(std::make_pair(testNo, connectAndSenseVoltage()));
+        }
+
+        if(testResults.size() == 100)
+            saveRecordedMesuremants(testResults);
 
     }
     if((consecutiveErrorHeader + consecutiveErrorData) < 3)
         std::cout << "Total Test: " << TOTAL_TEST_NO << ", Total error: " << totalErrorHeader + totalErrorData
                                                                      << " (" << totalErrorHeader << " header, "
                                                                      << " " << totalErrorData << " data)" << std::endl;
+    system("python3 ./graphTestResult.py");
 
     delete sensor;
     delete irManager;
@@ -96,11 +98,10 @@ float connectAndSenseVoltage(){
     return temp;
 }
 
-void saveRecordedMesuremants(std::vector<float> &voltages) {
-        std::ofstream file("voltage_measurements.txt", std::ios::app);
-        for (int i = 0; i < voltages.size(); i++) {
-            file << voltages[i] << std::endl;
-        }
+void saveRecordedMesuremants(std::vector<std::pair<int, float>> &testResults){
+        std::ofstream file("testResults.txt", std::ios::app);
+        for (auto &result : testResults)
+            file << "test" << result.first << ": " << result.second << std::endl;
         file.close();
-        voltages.clear();
+        testResults.clear();
 }

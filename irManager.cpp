@@ -4,7 +4,7 @@ bool IrManager::edgeFlag = true;
 
 IrManager::IrManager(int irPin){
     pinMode(irPin, INPUT);
-    pullUpDnControl(irPin, PUD_DOWN);
+    pullUpDnControl(irPin, PUD_UP);
     wiringPiISR(irPin, INT_EDGE_FALLING, &gpoiIntHandler);
 }
 
