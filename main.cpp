@@ -20,6 +20,7 @@ int main (int argc, char **argv)
 
     for(int testNo=1; testNo <= TOTAL_TEST_NO; testNo++)
     {
+        delay(100);
         servoController->pressButton();
         servoController->releaseButton();
 
@@ -30,7 +31,6 @@ int main (int argc, char **argv)
                                                                        << " (" << totalErrorHeader << " header, "
                                                                        << " " << totalErrorData << " data)" << std::endl;
             testResults.push_back(std::make_pair(testNo, connectAndSenseVoltage()));
-            saveRecordedMesuremants(testResults);
             break;
         }
         else if(headerDurition > MIN_HEADER_DURATION && headerDurition < MAX_HEADER_DURATION){
@@ -54,12 +54,12 @@ int main (int argc, char **argv)
             totalErrorHeader++;
         }
 
-        if(testNo % 200 == 0){
+        if(testNo % TEST_QUANTITY_TO_MEASURE == 0){
             std::cout << "Test #" << testNo << ", ";
             testResults.push_back(std::make_pair(testNo, connectAndSenseVoltage()));
         }
 
-        if(testResults.size() == 100)
+        if(testResults.size() == MEASUREMENT_QUANTITY_TO_SAVE)
             saveRecordedMesuremants(testResults);
 
     }
@@ -67,8 +67,10 @@ int main (int argc, char **argv)
         std::cout << "Total Test: " << TOTAL_TEST_NO << ", Total error: " << totalErrorHeader + totalErrorData
                                                                      << " (" << totalErrorHeader << " header, "
                                                                      << " " << totalErrorData << " data)" << std::endl;
-    system("python3 ./graphTestResult.py");
+    if(testResults.size())
+        saveRecordedMesuremants(testResults);
 
+    system("python3 ./graphTestResult.py");
     delete sensor;
     delete irManager;
     delete servoController;

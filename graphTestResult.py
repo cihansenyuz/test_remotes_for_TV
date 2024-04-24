@@ -6,7 +6,7 @@ testNoLabels = []
 
 
 def read_data():
-    with open("6200_basım_sonucları_copy.txt", "r") as file:
+    with open("testResults.txt", "r") as file:
         lines = file.readlines()
     testValues = []
     for line in lines:
