@@ -13,7 +13,7 @@ ServoController::ServoController(int _servoPin) : servoPin(_servoPin) {
 }
 
 void ServoController::pressButton(){
-    pwmWrite(servoPin, 18);
+    pwmWrite(servoPin, 19);
     delay(65);
 }
 

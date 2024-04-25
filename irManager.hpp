@@ -24,7 +24,7 @@ using namespace std::chrono;
 
 #define BIT0 0
 #define BIT1 1
-#define MAX_REMOTE_LATE_RESPONSE 700000 // in usec
+#define MAX_REMOTE_LATE_RESPONSE 350000 // in usec
 
 class IrManager
 {

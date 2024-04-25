@@ -14,29 +14,26 @@ int main (int argc, char **argv)
     short totalErrorData = 0;
     short consecutiveErrorHeader = 0;
     short consecutiveErrorData = 0;
+    int testNo = 0;
 
     setupTest();
-    testResults.push_back(std::make_pair(0, connectAndSenseVoltage()));
+    testResults.push_back(std::make_pair(testNo++, connectAndSenseVoltage()));
 
-    for(int testNo=1; testNo <= TOTAL_TEST_NO; testNo++)
+    for( ; testNo <= TOTAL_TEST_NO; testNo++)
     {
-        delay(100);
+        delay(40);
         servoController->pressButton();
-        servoController->releaseButton();
-
         headerDurition = irManager->waitForHeaderBits();
-        
+        servoController->releaseButton();
         if((consecutiveErrorHeader + consecutiveErrorData) == 3){
-            std::cout << "Test terminated... Total test: " << testNo-1 << ", Total error: " << totalErrorHeader + totalErrorData
-                                                                       << " (" << totalErrorHeader << " header, "
-                                                                       << " " << totalErrorData << " data)" << std::endl;
+            std::cout << "Test aborted...\n";
             testResults.push_back(std::make_pair(testNo, connectAndSenseVoltage()));
             break;
         }
         else if(headerDurition > MIN_HEADER_DURATION && headerDurition < MAX_HEADER_DURATION){
-            for(int i=0; i<IR_DATA_SIZE; i++){
+            for(int i=0; i<IR_DATA_SIZE; i++)
                 data[i] = irManager->readBit();
-            }
+
             if(irManager->checkPowerKey(data, IR_DATA_SIZE)){
                 consecutiveErrorHeader = 0;
                 consecutiveErrorData = 0;
@@ -52,6 +49,10 @@ int main (int argc, char **argv)
             std::cout << "Could not catch the header, test #" << testNo << std::endl;
             consecutiveErrorHeader++;
             totalErrorHeader++;
+            delete irManager;
+            delay(200);
+            irManager = new IrManager(IR_PIN);
+            delay(2000);
         }
 
         if(testNo % TEST_QUANTITY_TO_MEASURE == 0){
@@ -63,17 +64,15 @@ int main (int argc, char **argv)
             saveRecordedMesuremants(testResults);
 
     }
-    if((consecutiveErrorHeader + consecutiveErrorData) < 3)
-        std::cout << "Total Test: " << TOTAL_TEST_NO << ", Total error: " << totalErrorHeader + totalErrorData
-                                                                     << " (" << totalErrorHeader << " header, "
-                                                                     << " " << totalErrorData << " data)" << std::endl;
+    std::cout << "Total Test: " << testNo << ", Total error: " << totalErrorHeader + totalErrorData
+                        << " (" << totalErrorHeader << " header, " << totalErrorData << " data)" << std::endl;
     if(testResults.size())
         saveRecordedMesuremants(testResults);
 
-    system("python3 ./graphTestResult.py");
     delete sensor;
     delete irManager;
     delete servoController;
+    system("python3 ./graphTestResult.py");
     return 0;
 }
 
