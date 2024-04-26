@@ -72,7 +72,7 @@ int main (int argc, char **argv)
     delete sensor;
     delete irManager;
     delete servoController;
-    //system("python3 ./graphTestResult.py");
+    system("python3 ./graphTestResult.py");
     return 0;
 }
 
