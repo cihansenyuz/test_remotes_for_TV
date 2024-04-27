@@ -32,7 +32,7 @@ plt.cla()
 if "--sc" in sys.argv:
     x_values, xlabel = readDataSc()
 elif "--sibc" in sys.argv:
-    read_data, x_values, xlabel = readDataSibc()
+    x_values, xlabel = readDataSibc()
 plt.plot(x_values, testValues[:len(x_values)], color='#1f77b4', linewidth=2, marker='o', markersize=6, markerfacecolor='#ff7f0e', markeredgewidth=1, markeredgecolor='#ff7f0e')
 plt.title('Test Results', fontsize=16, fontweight='bold')
 plt.xlabel(xlabel, fontsize=14)
