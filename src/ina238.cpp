@@ -82,16 +82,55 @@ void Ina238::deviceID() {
 }
 
 void Ina238::temperature() {
+    waitForConversion(tempratureSense);
     uint16_t word = getWordData(DIETEMP);
     float temp = static_cast<float>(word >> 4) * 0.125f; // shift 4 bits cause bits 0-3 are reserved
     std::cout << "Die Temp: " << temp << " C" << std::endl;
 }
 
 float Ina238::voltage() {
-    uint16_t word = getWordData(ADC_CONFIG);
-    ConversionTime_t conversionSelection = static_cast<ConversionTime_t>((word >> 9) & 0x07);
+    waitForConversion(vbusSense);
+    uint16_t word = getWordData(VBUS);
+    float batVoltage = static_cast<float>(word) * 0.003125f;
+    printf("Bus Voltage: %f V\n", batVoltage);
+    return batVoltage;
+}
+
+float Ina238::current() {
+    waitForConversion(vshuntSense);
+    uint16_t word = getWordData(CURRENT);
+    double current = static_cast<double>(word) * m_currentLsb * 1000000.0f;
+    if(current > m_maxCurrent)
+        current = 0;
+    std::cout << "Current: " << current << " uA" << std::endl;
+    return current;
+}
+
+uint16_t Ina238::getAlerts(){
+    uint16_t word = getWordData(DIAG_ALRT);
+    return word;
+}
+
+void Ina238::waitForConversion(Sensor_t sensor){
     float conversionTime = 0;
     unsigned int delay = 0;
+    ConversionTime_t conversionSelection;
+
+    uint16_t word = getWordData(ADC_CONFIG);
+    switch(sensor){
+        case vbusSense:
+            conversionSelection = static_cast<ConversionTime_t>((word >> CONVERSION_VBUS_SHIFT) & ADC_CONVERSION_MASK);
+            break;
+            
+        case vshuntSense:
+            conversionSelection = static_cast<ConversionTime_t>((word >> CONVERSION_VSHUNT_SHIFT) & ADC_CONVERSION_MASK);
+            break;
+        
+        case tempratureSense:
+            conversionSelection = static_cast<ConversionTime_t>((word >> CONVERSION_TEMP_SHIFT) & ADC_CONVERSION_MASK);
+            break;  
+    }
+
     switch (conversionSelection){
         case t50us:
             conversionTime = 50; break;
@@ -108,33 +147,13 @@ float Ina238::voltage() {
         case t2074us:
             conversionTime = 2074; break;
     }
+
     short averaging = (word & 0x07);
     if(averaging <= 3)
         averaging = pow(2, averaging) * pow(2, averaging);
     else
         averaging = pow(2, averaging) * 8;
-    
-    delay = 7.13 * conversionTime * averaging; // no less than (7,13 * ADC conversion time * averaging)
-    std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(delay/1000))); 
-    
-    word = getWordData(VBUS);
-    float batVoltage = static_cast<float>(word) * 0.003125f;
-    printf("Bus Voltage: %f V\n", batVoltage);
-    return batVoltage;
-}
 
-float Ina238::current() {
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    uint16_t word = getWordData(CURRENT);
-    double current = static_cast<double>(word) * m_currentLsb * 1000000.0f;
-    if(current > m_maxCurrent)
-        current = 0;
-    std::cout << "Current: " << current << " uA" << std::endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    return current;
-}
-
-uint16_t Ina238::getAlerts(){
-    uint16_t word = getWordData(DIAG_ALRT);
-    return word;
+    delay = static_cast<unsigned int> (7.13 * conversionTime * averaging)/1000;
+    std::this_thread::sleep_for(std::chrono::milliseconds(delay));
 }

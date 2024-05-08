@@ -34,6 +34,17 @@
 #define POWER 0x08            // Power result
 #define DIAG_ALRT  0x0B       // Alerts
 
+#define CONVERSION_VBUS_SHIFT 9
+#define CONVERSION_VSHUNT_SHIFT 6
+#define CONVERSION_TEMP_SHIFT 3
+#define ADC_CONVERSION_MASK 0x07
+
+typedef enum Sensor_t{
+    vbusSense = 0,
+    vshuntSense = 1,
+    tempratureSense = 2
+}Sensor_t;
+
 typedef enum ConversionTime_t{
     t50us = 0,
     t84us = 1,
@@ -49,8 +60,6 @@ class Ina238 {
 public:
     Ina238(uint8_t addr, int busNum);
     ~Ina238(){}
-    uint16_t getWordData(uint8_t reg);
-    void writeWordData(int fd, uint8_t reg, uint16_t data);
     void setShuntCal(double res, double maxCur);  // max current in mA
     uint16_t reverseWord(uint16_t oldWord);
     bool checkDevice();
@@ -65,6 +74,10 @@ private:
     float m_maxCurrent;
     uint8_t m_addr;
     double m_currentLsb;
+
+    uint16_t getWordData(uint8_t reg);
+    void writeWordData(int fd, uint8_t reg, uint16_t data);
+    void waitForConversion(Sensor_t sensor);
 };
 
 #endif // INA238_HPP
