@@ -32,6 +32,18 @@
 #define DIETEMP 0x06          // Temperature Measurement (DIETEMP) Register
 #define CURRENT 0x07          // Current result
 #define POWER 0x08            // Power result
+#define DIAG_ALRT  0x0B       // Alerts
+
+typedef enum ConversionTime_t{
+    t50us = 0,
+    t84us = 1,
+    t150us = 2,
+    t280us = 3,
+    t540us = 4,
+    t1052us = 5,
+    t2074us = 6,
+    t4120us = 7
+}ConversionTime_t;
 
 class Ina238 {
 public:
@@ -39,16 +51,18 @@ public:
     ~Ina238(){}
     uint16_t getWordData(uint8_t reg);
     void writeWordData(int fd, uint8_t reg, uint16_t data);
-    void setShuntCal(double res, double maxCur);
+    void setShuntCal(double res, double maxCur);  // max current in mA
     uint16_t reverseWord(uint16_t oldWord);
     bool checkDevice();
     void deviceID();
     void temperature();
     float voltage();
     float current();
+    uint16_t getAlerts();
 private:
     int fd;
     int m_bus;
+    float m_maxCurrent;
     uint8_t m_addr;
     double m_currentLsb;
 };

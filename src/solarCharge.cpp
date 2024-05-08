@@ -9,20 +9,22 @@ int main (int argc, char **argv)
     struct tm *localTime;
     setupTest();
 
-    int i=5;
-    while(!batteryFullFlag){
+    float current,voltage;
+    int i = 0;
+    
+    while(i < 10){
+        sleep(3);
         time(&currentTime);
         localTime = localtime(&currentTime);
-        float voltage = connectAndSenseVoltage();
+        
+        voltage = connectAndSenseVoltage();
+        //std::cout << "Alerts: " << std::hex << sensor->getAlerts() << std::endl;
         saveRecordedMesuremants(localTime, voltage);
-        sleep(5);
-        i--;
-        if(!i)
-            break;
+        i++;
     }
-
+    
     delete sensor;
-    system("python3 ./graphTestResult.py --sc");
+    //system("python3 ./graphTestResult.py --sc");
     return 0;
 }
 
@@ -34,15 +36,15 @@ void setupTest(){
 
     pinMode(RELAY_PIN, OUTPUT);
     digitalWrite(RELAY_PIN, HIGH);
+    sleep(1);
 }
 
 float connectAndSenseVoltage(){
     digitalWrite(RELAY_PIN, LOW);
-    delay(50);
-    float temp = sensor->voltage();
+    float result = sensor->voltage();
     digitalWrite(RELAY_PIN, HIGH);
-    delay(50);
-    return temp;
+    delay(1);
+    return result;
 }
 
 void saveRecordedMesuremants(struct tm* localTime, float &voltage){
