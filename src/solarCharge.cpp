@@ -9,22 +9,20 @@ int main (int argc, char **argv)
     struct tm *localTime;
     setupTest();
 
-    float current,voltage;
-    int i = 0;
-    
-    while(i < 10){
-        sleep(3);
+    float voltage;
+
+    while(voltage <= 2.71){
         time(&currentTime);
         localTime = localtime(&currentTime);
         
         voltage = connectAndSenseVoltage();
         //std::cout << "Alerts: " << std::hex << sensor->getAlerts() << std::endl;
         saveRecordedMesuremants(localTime, voltage);
-        i++;
+        sleep(900);
     }
     
     delete sensor;
-    //system("python3 ./graphTestResult.py --sc");
+    system("python3 ./graphTestResult.py --sc");
     return 0;
 }
 
@@ -50,14 +48,14 @@ float connectAndSenseVoltage(){
 void saveRecordedMesuremants(struct tm* localTime, float &voltage){
         std::ofstream file("testResults.txt", std::ios::app);
         file << "Time";
-        if(localTime->tm_min < 10){
+        if(localTime->tm_hour < 10){
             file << "0";
         }
-        file << localTime->tm_min << '.';
-        if (localTime->tm_sec < 10)
+        file << localTime->tm_hour << '.';
+        if (localTime->tm_min < 10)
         {
             file << "0";
         }
-        file << localTime->tm_sec << ": " << voltage << std::endl;
+        file << localTime->tm_min << ": " << voltage << std::endl;
         file.close();
 }

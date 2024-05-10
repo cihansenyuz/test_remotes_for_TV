@@ -4,7 +4,6 @@ Ina238 *sensor;
 IrManager *irManager;
 ServoController *servoController;
 
-
 int main (int argc, char **argv)
 {
     bool data[IR_DATA_SIZE];
@@ -72,7 +71,7 @@ int main (int argc, char **argv)
     delete sensor;
     delete irManager;
     delete servoController;
-    system("python3 ./graphTestResult.py");
+    system("python3 ./graphTestResult.py --sibc");
     return 0;
 }
 
