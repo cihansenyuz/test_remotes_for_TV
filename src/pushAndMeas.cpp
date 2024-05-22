@@ -59,11 +59,11 @@ int main (int argc, char **argv)
         }
         
         buttonPress++;
-        if (buttonPress == 10)
+        if (buttonPress == 50)
         {
             buttonPress = 0;
             sleep(900);
-            std::cout << "10 press completed...\n";
+            std::cout << "50 press completed...\n";
         }
     }
 

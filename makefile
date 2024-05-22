@@ -8,6 +8,12 @@ solarlessIrButtonClick: solarlessIrButtonClick.o ina238.o irManager.o servoContr
 solarCharge: solarCharge.o ina238.o
 	$(CC) $^ $(CFLAGS) $(LINKERFLAGS) -o $@
 
+solarChargeMonitor: solarChargeMonitor.o ina238.o
+	$(CC) $^ $(CFLAGS) $(LINKERFLAGS) -o $@
+
+solarChargeMonitor.o: ./src/solarChargeMonitor.cpp ./inc/solarCharge.hpp
+	$(CC) -c $< $(CFLAGS)
+	
 %.o: ./src/%.cpp ./inc/%.hpp
 	@$(CC) -c $< $(CFLAGS)
 

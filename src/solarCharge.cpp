@@ -9,16 +9,16 @@ int main (int argc, char **argv)
     struct tm *localTime;
     setupTest();
 
-    float voltage;
+    float voltage = 3;
 
-    while(voltage <= 2.71){
+    while(voltage >= 2.66){
         time(&currentTime);
         localTime = localtime(&currentTime);
         
         voltage = connectAndSenseVoltage();
         //std::cout << "Alerts: " << std::hex << sensor->getAlerts() << std::endl;
         saveRecordedMesuremants(localTime, voltage);
-        sleep(900);
+        sleep(3600);
     }
     
     delete sensor;
