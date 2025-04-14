@@ -12,7 +12,7 @@ else()
     message(FATAL_ERROR "wiringPi library not found. Please install it.")
 endif()
 
-set(PROJECT_SOURCES
+set(PROJECT_SOURCES main.cpp
             src/solarlessIrButtonClick.cpp
             src/ina238.cpp
             src/irManager.cpp

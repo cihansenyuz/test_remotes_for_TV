@@ -1,10 +1,6 @@
 #include "solarlessIrButtonClick.hpp"
 
-Ina238 *sensor;
-IrManager *irManager;
-ServoController *servoController;
-
-int main (int argc, char **argv)
+void SolarlessIrButtonClick::runTest()
 {
     bool data[IR_DATA_SIZE];
     std::vector<std::pair<int, float>> testResults;
@@ -15,7 +11,6 @@ int main (int argc, char **argv)
     short consecutiveErrorData = 0;
     int testNo = 0;
 
-    setupTest();
     testResults.push_back(std::make_pair(testNo++, connectAndSenseVoltage()));
 
     for( ; testNo <= TOTAL_TEST_NO; testNo++)
@@ -67,15 +62,16 @@ int main (int argc, char **argv)
                         << " (" << totalErrorHeader << " header, " << totalErrorData << " data)" << std::endl;
     if(testResults.size())
         saveRecordedMesuremants(testResults);
+}
 
+SolarlessIrButtonClick::~SolarlessIrButtonClick(){
     delete sensor;
     delete irManager;
     delete servoController;
     system("python3 ./graphTestResult.py --sibc");
-    return 0;
 }
 
-void setupTest(){
+SolarlessIrButtonClick::SolarlessIrButtonClick(){
     if(wiringPiSetup())
         std::cerr << "wiringPi setup fail" << std::endl;
 
@@ -89,7 +85,7 @@ void setupTest(){
     digitalWrite(RELAY_PIN, HIGH);
 }
 
-float connectAndSenseVoltage(){
+float SolarlessIrButtonClick::connectAndSenseVoltage(){
     digitalWrite(RELAY_PIN, LOW);
     delay(50);
     float temp = sensor->voltage();
@@ -98,7 +94,7 @@ float connectAndSenseVoltage(){
     return temp;
 }
 
-void saveRecordedMesuremants(std::vector<std::pair<int, float>> &testResults){
+void SolarlessIrButtonClick::saveRecordedMesuremants(std::vector<std::pair<int, float>> &testResults){
         std::ofstream file("testResults.txt", std::ios::app);
         for (auto &result : testResults)
             file << "test" << result.first << ": " << result.second << std::endl;
