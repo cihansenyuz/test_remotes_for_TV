@@ -19,6 +19,7 @@ public:
     SolarCharge();
     ~SolarCharge();
     void runTest();
+    void runTest2();
 
 private:
     Ina238 *sensor;
