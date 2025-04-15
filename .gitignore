@@ -2,3 +2,4 @@ __pycache__
 firstTestFigure.png
 firstTestResults.txtbuild/
 build/
+.vscode/
