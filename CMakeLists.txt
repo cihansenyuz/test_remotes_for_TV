@@ -12,8 +12,12 @@ else()
     message(FATAL_ERROR "wiringPi library not found. Please install it.")
 endif()
 
+if (NOT DEFINED TEST_FILE)
+message(FATAL_ERROR "Testi içeren kaynak dosyasının adını belirtin\nÖrneğin: -DTEST_FILE=solarlessIrButtonClick")
+endif()
+
 set(PROJECT_SOURCES main.cpp
-            src/solarlessIrButtonClick.cpp
+            src/${TEST_FILE}.cpp
             src/ina238.cpp
             src/irManager.cpp
             src/servoController.cpp
@@ -21,7 +25,7 @@ set(PROJECT_SOURCES main.cpp
             inc/ina238.hpp
             inc/irManager.hpp
             inc/servoController.hpp
-            inc/solarlessIrButtonClick.hpp
+            inc/${TEST_FILE}.hpp
             )
 
 add_executable(remote_tester ${PROJECT_SOURCES})
