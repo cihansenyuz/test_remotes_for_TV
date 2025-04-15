@@ -1,3 +1,5 @@
+#pragma once
+
 #include "ina238.hpp"
 #include "irManager.hpp"
 #include "servoController.hpp"
@@ -24,6 +26,17 @@
 #define MIN_HEADER_DURATION 7800
 #define MAX_HEADER_DURATION 8200
 
-void setupTest();
-float connectAndSenseVoltage();
-void saveRecordedMesuremants(std::vector<std::pair<int, float>>&);
+class PushAndMeas{
+public:
+    PushAndMeas();
+    ~PushAndMeas();
+    void runTest();
+
+private:
+    Ina238 *sensor;
+    IrManager *irManager;
+    ServoController *servoController;
+
+    float connectAndSenseVoltage();
+    void saveRecordedMesuremants(struct tm* localTime, float &voltage, bool &batteryLowFlag);
+};

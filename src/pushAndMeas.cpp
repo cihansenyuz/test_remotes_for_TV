@@ -1,11 +1,6 @@
 #include "pushAndMeas.hpp"
 
-Ina238 *sensor;
-IrManager *irManager;
-ServoController *servoController;
-
-int main (int argc, char **argv)
-{
+void PushAndMeas::runTest(){
     int headerDurition = 0;
     short consecutiveErrorHeader = 0;
     int timeOut = 0;
@@ -14,7 +9,6 @@ int main (int argc, char **argv)
     time_t currentTime;
     struct tm *localTime;
     bool batteryLowFlag = false;
-    setupTest();
 
     while(timeOut != 24)
     {
@@ -71,10 +65,9 @@ int main (int argc, char **argv)
     delete irManager;
     delete servoController;
     system("python3 ./graphTestResult.py --pam");
-    return 0;
 }
 
-void setupTest(){
+PushAndMeas::PushAndMeas(){
     if(wiringPiSetup())
         std::cerr << "wiringPi setup fail" << std::endl;
 
@@ -88,7 +81,7 @@ void setupTest(){
     digitalWrite(RELAY_PIN, HIGH);
 }
 
-float connectAndSenseVoltage(){
+float PushAndMeas::connectAndSenseVoltage(){
     digitalWrite(RELAY_PIN, LOW);
     delay(50);
     float temp = sensor->voltage();
@@ -97,7 +90,7 @@ float connectAndSenseVoltage(){
     return temp;
 }
 
-void saveRecordedMesuremants(struct tm* localTime, float &voltage, bool &batteryLowFlag){
+void PushAndMeas::saveRecordedMesuremants(struct tm* localTime, float &voltage, bool &batteryLowFlag){
         std::ofstream file("testResults.txt", std::ios::app);
         file << "Time";
         if(localTime->tm_hour < 10){
