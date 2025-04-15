@@ -1,3 +1,5 @@
+#pragma once
+
 #include "ina238.hpp"
 #include <wiringPi.h>
 #include <fstream>
@@ -12,6 +14,15 @@
 
 using namespace std::chrono;
 
-void setupTest();
-float connectAndSenseVoltage();
-void saveRecordedMesuremants(struct tm* localTime, float &voltage);
+class SolarCharge{
+public:
+    SolarCharge();
+    ~SolarCharge();
+    void runTest();
+
+private:
+    Ina238 *sensor;
+    float connectAndSenseVoltage();
+    void saveRecordedMesuremants(struct tm* localTime, float &voltage);
+};
+

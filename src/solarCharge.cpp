@@ -1,13 +1,9 @@
 #include "solarCharge.hpp"
 
-Ina238 *sensor;
-
-int main (int argc, char **argv)
-{
+void SolarCharge::runTest(){
     bool batteryFullFlag = false;
     time_t currentTime;
     struct tm *localTime;
-    setupTest();
 
     float voltage = 3;
 
@@ -21,12 +17,10 @@ int main (int argc, char **argv)
         sleep(3600);
     }
     
-    delete sensor;
     system("python3 ./graphTestResult.py --sc");
-    return 0;
 }
 
-void setupTest(){
+SolarCharge::SolarCharge(){
     if(wiringPiSetup())
         std::cerr << "wiringPi setup fail" << std::endl;
 
@@ -37,7 +31,11 @@ void setupTest(){
     sleep(1);
 }
 
-float connectAndSenseVoltage(){
+SolarCharge::~SolarCharge(){
+    delete sensor;
+}
+
+float SolarCharge::connectAndSenseVoltage(){
     digitalWrite(RELAY_PIN, LOW);
     float result = sensor->voltage();
     digitalWrite(RELAY_PIN, HIGH);
@@ -45,7 +43,7 @@ float connectAndSenseVoltage(){
     return result;
 }
 
-void saveRecordedMesuremants(struct tm* localTime, float &voltage){
+void SolarCharge::saveRecordedMesuremants(struct tm* localTime, float &voltage){
         std::ofstream file("testResults.txt", std::ios::app);
         file << "Time";
         if(localTime->tm_hour < 10){
