@@ -3,10 +3,8 @@
 #include "ina238.hpp"
 #include "irManager.hpp"
 #include "servoController.hpp"
-#include <wiringPi.h>
-#include <stdio.h>
+
 #include <vector>
-#include <fstream>
 
 #define TOTAL_TEST_NO 100000 // integer multiple of TEST_QUANTITY_TO_MEASURE
 #define TEST_QUANTITY_TO_MEASURE 200

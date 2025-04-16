@@ -1,3 +1,16 @@
+/**
+  ******************************************************************************
+  * @file    ina238config.hpp
+  * @authors Cihan Senyuz
+  * @date    16.04.2025
+  * @brief   Header for configrable variables of ina238 module hardware.
+  *                 This file contains constant variables for the INA238 module.
+  *          These values should not be changed unless the hardware is changed.
+  *                 
+  * 
+  ******************************************************************************
+  */
+
 #pragma once
 
 #include <cstdint>

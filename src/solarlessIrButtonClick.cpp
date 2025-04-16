@@ -1,4 +1,9 @@
 #include "solarlessIrButtonClick.hpp"
+#include "ina238config.hpp"
+
+#include <fstream>
+#include <wiringPi.h>
+#include <stdio.h>
 
 void SolarlessIrButtonClick::runTest()
 {
@@ -45,7 +50,7 @@ void SolarlessIrButtonClick::runTest()
             totalErrorHeader++;
             delete irManager;
             delay(200);
-            irManager = new IrManager(IR_PIN);
+            irManager = new IrManager(inaConfig::IR_PIN);
             delay(2000);
         }
 
@@ -75,21 +80,21 @@ SolarlessIrButtonClick::SolarlessIrButtonClick(){
     if(wiringPiSetup())
         std::cerr << "wiringPi setup fail" << std::endl;
 
-    sensor = new Ina238(DEVICE_ADDRESS, BUS_NUMBER);
-    sensor->setShuntCal(SHUNT_RESISTANCE, MAX_CURRENT);
-    irManager = new IrManager(IR_PIN);
-    servoController = new ServoController(SERVO_PIN);
+    sensor = new Ina238(inaConfig::DEVICE_ADDRESS, inaConfig::BUS_NUMBER);
+    sensor->setShuntCal(inaConfig::SHUNT_RESISTANCE, inaConfig::MAX_CURRENT);
+    irManager = new IrManager(inaConfig::IR_PIN);
+    servoController = new ServoController(inaConfig::SERVO_PIN);
     
     // Relay setup
-    pinMode(RELAY_PIN, OUTPUT);
-    digitalWrite(RELAY_PIN, HIGH);
+    pinMode(inaConfig::RELAY_PIN, OUTPUT);
+    digitalWrite(inaConfig::RELAY_PIN, HIGH);
 }
 
 float SolarlessIrButtonClick::connectAndSenseVoltage(){
-    digitalWrite(RELAY_PIN, LOW);
+    digitalWrite(inaConfig::RELAY_PIN, LOW);
     delay(50);
     float temp = sensor->voltage();
-    digitalWrite(RELAY_PIN, HIGH);
+    digitalWrite(inaConfig::RELAY_PIN, HIGH);
     delay(50);
     return temp;
 }
