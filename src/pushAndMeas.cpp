@@ -1,4 +1,13 @@
 #include "pushAndMeas.hpp"
+#include "ina238config.hpp"
+#include "testconfig.hpp"
+
+#include <wiringPi.h>
+#include <stdio.h>
+#include <vector>
+#include <fstream>
+#include <ctime>
+#include <unistd.h>
 
 void PushAndMeas::runTest(){
     int headerDurition = 0;
@@ -39,7 +48,7 @@ void PushAndMeas::runTest(){
             buttonPress = 0;
             continue;
         }
-        else if(headerDurition > MIN_HEADER_DURATION && headerDurition < MAX_HEADER_DURATION){
+        else if(headerDurition > testconfig::MIN_HEADER_DURATION && headerDurition < testconfig::MAX_HEADER_DURATION){
             batteryLowFlag = false;
             consecutiveErrorHeader = 0;
         }
@@ -48,7 +57,7 @@ void PushAndMeas::runTest(){
             consecutiveErrorHeader++;
             delete irManager;
             delay(200);
-            irManager = new IrManager(IR_PIN);
+            irManager = new IrManager(inaConfig::IR_PIN);
             delay(1000);
         }
         
@@ -71,21 +80,27 @@ PushAndMeas::PushAndMeas(){
     if(wiringPiSetup())
         std::cerr << "wiringPi setup fail" << std::endl;
 
-    sensor = new Ina238(DEVICE_ADDRESS, BUS_NUMBER);
-    sensor->setShuntCal(SHUNT_RESISTANCE, MAX_CURRENT);
-    irManager = new IrManager(IR_PIN);
-    servoController = new ServoController(SERVO_PIN);
+    sensor = new Ina238(inaConfig::DEVICE_ADDRESS, inaConfig::BUS_NUMBER);
+    sensor->setShuntCal(inaConfig::SHUNT_RESISTANCE, inaConfig::MAX_CURRENT);
+    irManager = new IrManager(inaConfig::IR_PIN);
+    servoController = new ServoController(inaConfig::SERVO_PIN);
     
     // Relay setup
-    pinMode(RELAY_PIN, OUTPUT);
-    digitalWrite(RELAY_PIN, HIGH);
+    pinMode(inaConfig::RELAY_PIN, OUTPUT);
+    digitalWrite(inaConfig::RELAY_PIN, HIGH);
+}
+
+PushAndMeas::~PushAndMeas(){
+    delete sensor;
+    delete irManager;
+    delete servoController;
 }
 
 float PushAndMeas::connectAndSenseVoltage(){
-    digitalWrite(RELAY_PIN, LOW);
+    digitalWrite(inaConfig::RELAY_PIN, LOW);
     delay(50);
     float temp = sensor->voltage();
-    digitalWrite(RELAY_PIN, HIGH);
+    digitalWrite(inaConfig::RELAY_PIN, HIGH);
     delay(50);
     return temp;
 }
