@@ -1,5 +1,6 @@
 #include "solarlessIrButtonClick.hpp"
 #include "ina238config.hpp"
+#include "testconfig.hpp"
 
 #include <fstream>
 #include <wiringPi.h>
@@ -7,7 +8,7 @@
 
 void SolarlessIrButtonClick::runTest()
 {
-    bool data[IR_DATA_SIZE];
+    bool data[testconfig::IR_DATA_SIZE];
     std::vector<std::pair<int, float>> testResults;
     int headerDurition = 0;
     short totalErrorHeader = 0;
@@ -18,7 +19,7 @@ void SolarlessIrButtonClick::runTest()
 
     testResults.push_back(std::make_pair(testNo++, connectAndSenseVoltage()));
 
-    for( ; testNo <= TOTAL_TEST_NO; testNo++)
+    for( ; testNo <= testconfig::TOTAL_TEST_NO; testNo++)
     {
         delay(40);
         servoController->pressButton();
@@ -29,11 +30,11 @@ void SolarlessIrButtonClick::runTest()
             testResults.push_back(std::make_pair(testNo, connectAndSenseVoltage()));
             break;
         }
-        else if(headerDurition > MIN_HEADER_DURATION && headerDurition < MAX_HEADER_DURATION){
-            for(int i=0; i<IR_DATA_SIZE; i++)
+        else if(headerDurition > testconfig::MIN_HEADER_DURATION && headerDurition < testconfig::MAX_HEADER_DURATION){
+            for(int i=0; i<testconfig::IR_DATA_SIZE; i++)
                 data[i] = irManager->readBit();
 
-            if(irManager->checkPowerKey(data, IR_DATA_SIZE)){
+            if(irManager->checkPowerKey(data, testconfig::IR_DATA_SIZE)){
                 consecutiveErrorHeader = 0;
                 consecutiveErrorData = 0;
             }
@@ -54,12 +55,12 @@ void SolarlessIrButtonClick::runTest()
             delay(2000);
         }
 
-        if(testNo % TEST_QUANTITY_TO_MEASURE == 0){
+        if(testNo % testconfig::TEST_QUANTITY_TO_MEASURE == 0){
             std::cout << "Test #" << testNo << ", ";
             testResults.push_back(std::make_pair(testNo, connectAndSenseVoltage()));
         }
 
-        if(testResults.size() == MEASUREMENT_QUANTITY_TO_SAVE)
+        if(testResults.size() == testconfig::MEASUREMENT_QUANTITY_TO_SAVE)
             saveRecordedMesuremants(testResults);
 
     }
