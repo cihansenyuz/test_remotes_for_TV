@@ -36,6 +36,7 @@ set(PROJECT_SOURCES main.cpp
             src/servoController.cpp
 
             inc/ina238.hpp
+            inc/ina238config.hpp
             inc/irManager.hpp
             inc/servoController.hpp
             inc/${TEST_FILE}.hpp

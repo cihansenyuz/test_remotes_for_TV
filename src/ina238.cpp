@@ -1,6 +1,6 @@
 # include "ina238.hpp"
 
-Ina238::Ina238(uint8_t addr, int busNum) {
+Ina238::Ina238(uint8_t addr, uint8_t busNum) {
     fd = wiringPiI2CSetup(addr);
     m_bus = busNum;
     m_addr = addr;

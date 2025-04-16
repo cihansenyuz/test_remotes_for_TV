@@ -1,4 +1,13 @@
 #include "solarCharge.hpp"
+#include "ina238config.hpp"
+
+#include <wiringPi.h>
+#include <vector>
+#include <ctime>
+#include <fstream>
+#include <unistd.h>
+
+using namespace std::chrono;
 
 void SolarCharge::runTest(){
     bool batteryFullFlag = false;
@@ -44,10 +53,10 @@ SolarCharge::SolarCharge(){
     if(wiringPiSetup())
         std::cerr << "wiringPi setup fail" << std::endl;
 
-    sensor = new Ina238(DEVICE_ADDRESS, BUS_NUMBER);
+    sensor = new Ina238(inaConfig::DEVICE_ADDRESS, inaConfig::BUS_NUMBER);
 
-    pinMode(RELAY_PIN, OUTPUT);
-    digitalWrite(RELAY_PIN, HIGH);
+    pinMode(inaConfig::RELAY_PIN, OUTPUT);
+    digitalWrite(inaConfig::RELAY_PIN, HIGH);
     sleep(1);
 }
 
@@ -56,9 +65,9 @@ SolarCharge::~SolarCharge(){
 }
 
 float SolarCharge::connectAndSenseVoltage(){
-    digitalWrite(RELAY_PIN, LOW);
+    digitalWrite(inaConfig::RELAY_PIN, LOW);
     float result = sensor->voltage();
-    digitalWrite(RELAY_PIN, HIGH);
+    digitalWrite(inaConfig::RELAY_PIN, HIGH);
     delay(1);
     return result;
 }

@@ -58,7 +58,7 @@ typedef enum ConversionTime_t{
 
 class Ina238 {
 public:
-    Ina238(uint8_t addr, int busNum);
+    Ina238(uint8_t addr, uint8_t busNum);
     ~Ina238(){}
     void setShuntCal(double res, double maxCur);  // max current in mA
     uint16_t reverseWord(uint16_t oldWord);
