@@ -78,26 +78,8 @@ SolarlessIrButtonClick::~SolarlessIrButtonClick(){
 }
 
 SolarlessIrButtonClick::SolarlessIrButtonClick(){
-    if(wiringPiSetup())
-        std::cerr << "wiringPi setup fail" << std::endl;
-
-    sensor = new Ina238(inaConfig::DEVICE_ADDRESS, inaConfig::BUS_NUMBER);
-    sensor->setShuntCal(inaConfig::SHUNT_RESISTANCE, inaConfig::MAX_CURRENT);
     irManager = new IrManager(inaConfig::IR_PIN);
     servoController = new ServoController(inaConfig::SERVO_PIN);
-    
-    // Relay setup
-    pinMode(inaConfig::RELAY_PIN, OUTPUT);
-    digitalWrite(inaConfig::RELAY_PIN, HIGH);
-}
-
-float SolarlessIrButtonClick::connectAndSenseVoltage(){
-    digitalWrite(inaConfig::RELAY_PIN, LOW);
-    delay(50);
-    float temp = sensor->voltage();
-    digitalWrite(inaConfig::RELAY_PIN, HIGH);
-    delay(50);
-    return temp;
 }
 
 void SolarlessIrButtonClick::saveRecordedMesuremants(std::vector<std::pair<int, float>> &testResults){

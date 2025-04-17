@@ -1,19 +1,18 @@
 #pragma once
 
-#include "ina238.hpp"
+#include "remotetest.hpp"
 #include "irManager.hpp"
 #include "servoController.hpp"
 
 #include <vector>
 
-class SolarlessIrButtonClick{
+class SolarlessIrButtonClick : public RemoteTest{
 public:
     SolarlessIrButtonClick();
     ~SolarlessIrButtonClick();
     void runTest();
 
 private:
-    Ina238* sensor;
     IrManager* irManager;
     ServoController* servoController;
     int testNo;
@@ -22,6 +21,5 @@ private:
     int consecutiveErrorHeader;
     int consecutiveErrorData;
 
-    float connectAndSenseVoltage();
     void saveRecordedMesuremants(std::vector<std::pair<int, float>>&);
 };

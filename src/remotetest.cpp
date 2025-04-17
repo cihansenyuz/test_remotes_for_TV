@@ -23,10 +23,11 @@ RemoteTest::~RemoteTest(){
 
 float RemoteTest::connectAndSenseVoltage(){
     digitalWrite(inaConfig::RELAY_PIN, LOW);
-    float result = sensor->voltage();
+    delay(50);
+    float calculated_voltage = sensor->voltage();
     digitalWrite(inaConfig::RELAY_PIN, HIGH);
-    delay(1);
-    return result;
+    delay(50);
+    return calculated_voltage;
 }
 
 void RemoteTest::saveRecordedMesuremants(struct tm* localTime, float &voltage){
