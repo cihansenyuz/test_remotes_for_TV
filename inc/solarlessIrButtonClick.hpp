@@ -15,11 +15,13 @@ public:
 private:
     IrManager* irManager;
     ServoController* servoController;
-    int testNo;
-    int totalErrorHeader;
-    int totalErrorData;
-    int consecutiveErrorHeader;
-    int consecutiveErrorData;
+    int headerDurition = 0;
+    int testNo = 1;
+    int totalErrorHeader = 0;
+    int totalErrorData = 0;
+    int consecutiveErrorHeader = 0;
+    int consecutiveErrorData = 0;
+    std::vector<std::pair<int, float>> testResults;
 
-    void saveRecordedMesuremants(std::vector<std::pair<int, float>>&);
+    void saveRecordedMesuremants();
 };

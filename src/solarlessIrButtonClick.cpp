@@ -9,14 +9,7 @@
 void SolarlessIrButtonClick::runTest()
 {
     bool data[testconfig::IR_DATA_SIZE];
-    std::vector<std::pair<int, float>> testResults;
-    int headerDurition = 0;
-    short totalErrorHeader = 0;
-    short totalErrorData = 0;
-    short consecutiveErrorHeader = 0;
-    short consecutiveErrorData = 0;
-    int testNo = 0;
-
+    testResults.reserve(testconfig::TOTAL_TEST_NO);
     testResults.push_back(std::make_pair(testNo++, connectAndSenseVoltage()));
 
     for( ; testNo <= testconfig::TOTAL_TEST_NO; testNo++)
@@ -82,7 +75,7 @@ SolarlessIrButtonClick::SolarlessIrButtonClick(){
     servoController = new ServoController(inaConfig::SERVO_PIN);
 }
 
-void SolarlessIrButtonClick::saveRecordedMesuremants(std::vector<std::pair<int, float>> &testResults){
+void SolarlessIrButtonClick::saveRecordedMesuremants(){
         std::ofstream file("testResults.txt", std::ios::app);
         for (auto &result : testResults)
             file << "test" << result.first << ": " << result.second << std::endl;
