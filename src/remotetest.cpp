@@ -1,5 +1,6 @@
 #include "remotetest.hpp"
 #include "ina238config.hpp"
+#include "testconfig.hpp"
 
 #include <wiringPi.h>
 #include <fstream>
@@ -31,7 +32,7 @@ float RemoteTest::connectAndSenseVoltage(){
 }
 
 void RemoteTest::saveRecordedMesuremants(struct tm* localTime, float &voltage){
-    std::ofstream file("testResults.txt", std::ios::app);
+    std::ofstream file(testconfig::TEST_RESULTS_FILE_NAME, std::ios::app);
     file << "Time";
     if(localTime->tm_hour < 10){
         file << "0";

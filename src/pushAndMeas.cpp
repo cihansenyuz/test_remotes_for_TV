@@ -13,7 +13,7 @@ void PushAndMeas::runTest(){
     time_t currentTime;
     struct tm *localTime;
 
-    while(timeOut != 24)
+    while(timeOut != testconfig::pushandmeas::TEST_TIMEOUT_WHEN_LOW_BATT)
     {
         time(&currentTime);
         localTime = localtime(&currentTime);
@@ -23,7 +23,7 @@ void PushAndMeas::runTest(){
 
         if (batteryLowFlag)
         {
-            sleep(900);
+            sleep(testconfig::pushandmeas::SLEEP_SECONDS_WHEN_LOW_BATT);
             timeOut++;
         }
         else
@@ -42,7 +42,7 @@ void PushAndMeas::runTest(){
             buttonPress = 0;
             continue;
         }
-        else if(headerDurition > testconfig::MIN_HEADER_DURATION && headerDurition < testconfig::MAX_HEADER_DURATION){
+        else if(headerDurition > testconfig::IR::MIN_HEADER_DURATION && headerDurition < testconfig::IR::MAX_HEADER_DURATION){
             batteryLowFlag = false;
             consecutiveErrorHeader = 0;
         }
@@ -59,7 +59,7 @@ void PushAndMeas::runTest(){
         if (buttonPress == 50)
         {
             buttonPress = 0;
-            sleep(900);
+            sleep(testconfig::pushandmeas::SLEEP_SECONDS_WHEN_HIGH_BATT);
             std::cout << "50 press completed...\n";
         }
     }
@@ -78,7 +78,7 @@ PushAndMeas::~PushAndMeas(){
 }
 
 void PushAndMeas::saveRecordedMesuremants(struct tm* localTime, float &voltage){
-        std::ofstream file("testResults.txt", std::ios::app);
+        std::ofstream file(testconfig::TEST_RESULTS_FILE_NAME, std::ios::app);
         file << "Time";
         if(localTime->tm_hour < 10){
             file << "0";

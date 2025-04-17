@@ -1,5 +1,6 @@
 #include "solarCharge.hpp"
 #include "ina238config.hpp"
+#include "testconfig.hpp"
 
 #include <vector>
 #include <ctime>
@@ -14,33 +15,14 @@ void SolarCharge::runTest(){
 
     float voltage = 3;
 
-    while(voltage >= 2.66){
+    while(voltage >= testconfig::solarcharge::BATT_LOW_THRESHOULD){
         time(&currentTime);
         localTime = localtime(&currentTime);
         
         voltage = connectAndSenseVoltage();
         //std::cout << "Alerts: " << std::hex << sensor->getAlerts() << std::endl;
         saveRecordedMesuremants(localTime, voltage);
-        sleep(3600);
-    }
-    
-    system("python3 ./graphTestResult.py --sc");
-}
-
-void SolarCharge::runTest2(){
-    time_t currentTime;
-    struct tm *localTime;
-
-    float voltage = 3;
-
-    while(voltage >= 2.66){
-        time(&currentTime);
-        localTime = localtime(&currentTime);
-        
-        voltage = connectAndSenseVoltage();
-        //std::cout << "Alerts: " << std::hex << sensor->getAlerts() << std::endl;
-        saveRecordedMesuremants(localTime, voltage);
-        sleep(10);
+        sleep(testconfig::solarcharge::SLEEP_SECONDS);
     }
     
     system("python3 ./graphTestResult.py --sc");

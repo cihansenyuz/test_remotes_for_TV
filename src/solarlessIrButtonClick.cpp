@@ -8,26 +8,28 @@
 
 void SolarlessIrButtonClick::runTest()
 {
-    bool data[testconfig::IR_DATA_SIZE];
-    testResults.reserve(testconfig::TOTAL_TEST_NO);
+    bool data[testconfig::IR::IR_DATA_SIZE];
+    testResults.reserve(testconfig::solarlessIrButtonClick::TOTAL_TEST_NO);
     testResults.push_back(std::make_pair(testNo++, connectAndSenseVoltage()));
 
-    for( ; testNo <= testconfig::TOTAL_TEST_NO; testNo++)
+    for( ; testNo <= testconfig::solarlessIrButtonClick::TOTAL_TEST_NO; testNo++)
     {
         delay(40);
         servoController->pressButton();
         headerDurition = irManager->waitForHeaderBits();
         servoController->releaseButton();
-        if((consecutiveErrorHeader + consecutiveErrorData) == 3){
+        if((consecutiveErrorHeader + consecutiveErrorData)
+            == testconfig::solarlessIrButtonClick::TOTAL_ERROR_TO_FAIL_TEST){
             std::cout << "Test aborted...\n";
             testResults.push_back(std::make_pair(testNo, connectAndSenseVoltage()));
             break;
         }
-        else if(headerDurition > testconfig::MIN_HEADER_DURATION && headerDurition < testconfig::MAX_HEADER_DURATION){
-            for(int i=0; i<testconfig::IR_DATA_SIZE; i++)
+        else if(headerDurition > testconfig::IR::MIN_HEADER_DURATION
+                && headerDurition < testconfig::IR::MAX_HEADER_DURATION){
+            for(int i=0; i<testconfig::IR::IR_DATA_SIZE; i++)
                 data[i] = irManager->readBit();
 
-            if(irManager->checkPowerKey(data, testconfig::IR_DATA_SIZE)){
+            if(irManager->checkPowerKey(data, testconfig::IR::IR_DATA_SIZE)){
                 consecutiveErrorHeader = 0;
                 consecutiveErrorData = 0;
             }
@@ -48,19 +50,19 @@ void SolarlessIrButtonClick::runTest()
             delay(2000);
         }
 
-        if(testNo % testconfig::TEST_QUANTITY_TO_MEASURE == 0){
+        if(testNo % testconfig::solarlessIrButtonClick::TEST_QUANTITY_TO_MEASURE == 0){
             std::cout << "Test #" << testNo << ", ";
             testResults.push_back(std::make_pair(testNo, connectAndSenseVoltage()));
         }
 
-        if(testResults.size() == testconfig::MEASUREMENT_QUANTITY_TO_SAVE)
-            saveRecordedMesuremants(testResults);
+        if(testResults.size() == testconfig::solarlessIrButtonClick::MEASUREMENT_QUANTITY_TO_SAVE)
+            saveRecordedMesuremants();
 
     }
     std::cout << "Total Test: " << testNo << ", Total error: " << totalErrorHeader + totalErrorData
                         << " (" << totalErrorHeader << " header, " << totalErrorData << " data)" << std::endl;
     if(testResults.size())
-        saveRecordedMesuremants(testResults);
+        saveRecordedMesuremants();
 }
 
 SolarlessIrButtonClick::~SolarlessIrButtonClick(){
@@ -76,7 +78,7 @@ SolarlessIrButtonClick::SolarlessIrButtonClick(){
 }
 
 void SolarlessIrButtonClick::saveRecordedMesuremants(){
-        std::ofstream file("testResults.txt", std::ios::app);
+        std::ofstream file(testconfig::TEST_RESULTS_FILE_NAME, std::ios::app);
         for (auto &result : testResults)
             file << "test" << result.first << ": " << result.second << std::endl;
         file.close();
