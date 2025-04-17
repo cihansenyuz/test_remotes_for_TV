@@ -9,7 +9,7 @@
 #include <ctime>
 #include <unistd.h>
 
-void PushAndMeas::runTest(){
+void PushAndMeas::runTest() override{
     int headerDurition = 0;
     short consecutiveErrorHeader = 0;
     int timeOut = 0;
@@ -17,7 +17,6 @@ void PushAndMeas::runTest(){
     float voltage;
     time_t currentTime;
     struct tm *localTime;
-    bool batteryLowFlag = false;
 
     while(timeOut != 24)
     {
@@ -70,42 +69,20 @@ void PushAndMeas::runTest(){
         }
     }
 
-    delete sensor;
-    delete irManager;
-    delete servoController;
     system("python3 ./graphTestResult.py --pam");
 }
 
 PushAndMeas::PushAndMeas(){
-    if(wiringPiSetup())
-        std::cerr << "wiringPi setup fail" << std::endl;
-
-    sensor = new Ina238(inaConfig::DEVICE_ADDRESS, inaConfig::BUS_NUMBER);
-    sensor->setShuntCal(inaConfig::SHUNT_RESISTANCE, inaConfig::MAX_CURRENT);
     irManager = new IrManager(inaConfig::IR_PIN);
     servoController = new ServoController(inaConfig::SERVO_PIN);
-    
-    // Relay setup
-    pinMode(inaConfig::RELAY_PIN, OUTPUT);
-    digitalWrite(inaConfig::RELAY_PIN, HIGH);
 }
 
-PushAndMeas::~PushAndMeas(){
-    delete sensor;
+PushAndMeas::~PushAndMeas() override{
     delete irManager;
     delete servoController;
 }
 
-float PushAndMeas::connectAndSenseVoltage(){
-    digitalWrite(inaConfig::RELAY_PIN, LOW);
-    delay(50);
-    float temp = sensor->voltage();
-    digitalWrite(inaConfig::RELAY_PIN, HIGH);
-    delay(50);
-    return temp;
-}
-
-void PushAndMeas::saveRecordedMesuremants(struct tm* localTime, float &voltage, bool &batteryLowFlag){
+void PushAndMeas::saveRecordedMesuremants(struct tm* localTime, float &voltage) override{
         std::ofstream file("testResults.txt", std::ios::app);
         file << "Time";
         if(localTime->tm_hour < 10){

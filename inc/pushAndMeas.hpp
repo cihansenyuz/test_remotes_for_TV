@@ -1,20 +1,19 @@
 #pragma once
 
-#include "ina238.hpp"
+#include "remotetest.hpp"
 #include "irManager.hpp"
 #include "servoController.hpp"
 
-class PushAndMeas{
+class PushAndMeas : public RemoteTest{
 public:
     PushAndMeas();
-    ~PushAndMeas();
-    void runTest();
+    ~PushAndMeas() override;
+    void runTest() override;
 
 private:
-    Ina238 *sensor;
     IrManager *irManager;
     ServoController *servoController;
+    bool batteryLowFlag{false};
 
-    float connectAndSenseVoltage();
-    void saveRecordedMesuremants(struct tm* localTime, float &voltage, bool &batteryLowFlag);
+    void saveRecordedMesuremants(struct tm* localTime, float &voltage) override;
 };
