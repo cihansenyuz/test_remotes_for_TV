@@ -13,20 +13,20 @@ else()
 endif()
 
 if (NOT DEFINED TEST_FILE)
-# solarlessIrButtonClick
+# irSignalValidationTest
 # solarCharge
 # pushAndMeas
-message(FATAL_ERROR "Testi içeren kaynak dosyasının adını belirtin\nÖrneğin: -DTEST_FILE=solarlessIrButtonClick")
+message(FATAL_ERROR "Testi içeren kaynak dosyasının adını belirtin\nÖrneğin: -DTEST_FILE=irSignalValidationTest")
 endif()
 
-if (TEST_FILE STREQUAL "solarlessIrButtonClick")
+if (TEST_FILE STREQUAL "irSignalValidationTest")
     add_compile_definitions(TEST_FILE_SOLARLESSIRBUTTONCLICK)
 elseif (TEST_FILE STREQUAL "solarCharge")
     add_compile_definitions(TEST_FILE_SOLARCHARGE)
 elseif (TEST_FILE STREQUAL "pushAndMeas")
     add_compile_definitions(TEST_FILE_PUSHANDMEAS)
 else()
-    message(FATAL_ERROR "belirtilen test dosyası cmake build'inde bulunamadı\nGeçerli dosyalar: solarlessIrButtonClick, solarCharge")
+    message(FATAL_ERROR "belirtilen test dosyası cmake build'inde bulunamadı\nGeçerli dosyalar: irSignalValidationTest, solarCharge")
 endif()
 
 set(PROJECT_SOURCES main.cpp

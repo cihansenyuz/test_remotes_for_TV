@@ -6,10 +6,10 @@
 
 #include <vector>
 
-class SolarlessIrButtonClick : public RemoteTest{
+class IrSignalValidationTest : public RemoteTest {
 public:
-    SolarlessIrButtonClick();
-    ~SolarlessIrButtonClick();
+    IrSignalValidationTest();
+    ~IrSignalValidationTest();
     void runTest();
 
 private:

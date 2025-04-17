@@ -23,7 +23,7 @@ namespace testconfig{
     constexpr int MAX_HEADER_DURATION = 8200;
   }
 
-  namespace solarlessIrButtonClick{
+  namespace irSignalValidationTest{
     /*
     1- her basımda header ve IR datasını kontrol eder
     2- peşpeşe TOTAL_ERROR_TO_FAIL_TEST kez yanlış okursa

@@ -1,4 +1,4 @@
-#include "solarlessIrButtonClick.hpp"
+#include "irSignalValidationTest.hpp"
 #include "ina238config.hpp"
 #include "testconfig.hpp"
 
@@ -6,20 +6,20 @@
 #include <wiringPi.h>
 #include <stdio.h>
 
-void SolarlessIrButtonClick::runTest()
+void IrSignalValidationTest::runTest()
 {
     bool data[testconfig::IR::IR_DATA_SIZE];
-    testResults.reserve(testconfig::solarlessIrButtonClick::TOTAL_TEST_NO);
+    testResults.reserve(testconfig::irSignalValidationTest::TOTAL_TEST_NO);
     testResults.push_back(std::make_pair(testNo++, connectAndSenseVoltage()));
 
-    for( ; testNo <= testconfig::solarlessIrButtonClick::TOTAL_TEST_NO; testNo++)
+    for( ; testNo <= testconfig::irSignalValidationTest::TOTAL_TEST_NO; testNo++)
     {
         delay(40);
         servoController->pressButton();
         headerDurition = irManager->waitForHeaderBits();
         servoController->releaseButton();
         if((consecutiveErrorHeader + consecutiveErrorData)
-            == testconfig::solarlessIrButtonClick::TOTAL_ERROR_TO_FAIL_TEST){
+            == testconfig::irSignalValidationTest::TOTAL_ERROR_TO_FAIL_TEST){
             std::cout << "Test aborted...\n";
             testResults.push_back(std::make_pair(testNo, connectAndSenseVoltage()));
             break;
@@ -50,12 +50,12 @@ void SolarlessIrButtonClick::runTest()
             delay(2000);
         }
 
-        if(testNo % testconfig::solarlessIrButtonClick::TEST_QUANTITY_TO_MEASURE == 0){
+        if(testNo % testconfig::irSignalValidationTest::TEST_QUANTITY_TO_MEASURE == 0){
             std::cout << "Test #" << testNo << ", ";
             testResults.push_back(std::make_pair(testNo, connectAndSenseVoltage()));
         }
 
-        if(testResults.size() == testconfig::solarlessIrButtonClick::MEASUREMENT_QUANTITY_TO_SAVE)
+        if(testResults.size() == testconfig::irSignalValidationTest::MEASUREMENT_QUANTITY_TO_SAVE)
             saveRecordedMesuremants();
 
     }
@@ -65,19 +65,19 @@ void SolarlessIrButtonClick::runTest()
         saveRecordedMesuremants();
 }
 
-SolarlessIrButtonClick::~SolarlessIrButtonClick(){
+IrSignalValidationTest::~IrSignalValidationTest(){
     delete sensor;
     delete irManager;
     delete servoController;
     system("python3 ./graphTestResult.py --sibc");
 }
 
-SolarlessIrButtonClick::SolarlessIrButtonClick(){
+IrSignalValidationTest::IrSignalValidationTest(){
     irManager = new IrManager(inaConfig::IR_PIN);
     servoController = new ServoController(inaConfig::SERVO_PIN);
 }
 
-void SolarlessIrButtonClick::saveRecordedMesuremants(){
+void IrSignalValidationTest::saveRecordedMesuremants(){
         std::ofstream file(testconfig::TEST_RESULTS_FILE_NAME, std::ios::app);
         for (auto &result : testResults)
             file << "test" << result.first << ": " << result.second << std::endl;
