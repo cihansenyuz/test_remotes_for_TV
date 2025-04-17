@@ -2,6 +2,8 @@
 #include "ina238config.hpp"
 
 #include <wiringPi.h>
+#include <fstream>
+#include <unistd.h>
 
 RemoteTest::RemoteTest(){
     if(wiringPiSetup())
@@ -19,7 +21,7 @@ RemoteTest::~RemoteTest(){
     delete sensor;
 }
 
-float connectAndSenseVoltage(){
+float RemoteTest::connectAndSenseVoltage(){
     digitalWrite(inaConfig::RELAY_PIN, LOW);
     float result = sensor->voltage();
     digitalWrite(inaConfig::RELAY_PIN, HIGH);
@@ -27,7 +29,7 @@ float connectAndSenseVoltage(){
     return result;
 }
 
-void saveRecordedMesuremants(struct tm* localTime, float &voltage){
+void RemoteTest::saveRecordedMesuremants(struct tm* localTime, float &voltage){
     std::ofstream file("testResults.txt", std::ios::app);
     file << "Time";
     if(localTime->tm_hour < 10){

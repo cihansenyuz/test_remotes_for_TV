@@ -9,7 +9,7 @@
 #include <ctime>
 #include <unistd.h>
 
-void PushAndMeas::runTest() override{
+void PushAndMeas::runTest(){
     int headerDurition = 0;
     short consecutiveErrorHeader = 0;
     int timeOut = 0;
@@ -24,7 +24,7 @@ void PushAndMeas::runTest() override{
         localTime = localtime(&currentTime);
         
         voltage = connectAndSenseVoltage();
-        saveRecordedMesuremants(localTime, voltage, batteryLowFlag);
+        saveRecordedMesuremants(localTime, voltage);
 
         if (batteryLowFlag)
         {
@@ -77,12 +77,12 @@ PushAndMeas::PushAndMeas(){
     servoController = new ServoController(inaConfig::SERVO_PIN);
 }
 
-PushAndMeas::~PushAndMeas() override{
+PushAndMeas::~PushAndMeas(){
     delete irManager;
     delete servoController;
 }
 
-void PushAndMeas::saveRecordedMesuremants(struct tm* localTime, float &voltage) override{
+void PushAndMeas::saveRecordedMesuremants(struct tm* localTime, float &voltage){
         std::ofstream file("testResults.txt", std::ios::app);
         file << "Time";
         if(localTime->tm_hour < 10){

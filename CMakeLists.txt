@@ -34,12 +34,14 @@ set(PROJECT_SOURCES main.cpp
             src/ina238.cpp
             src/irManager.cpp
             src/servoController.cpp
+            src/remotetest.cpp
 
             inc/ina238.hpp
             inc/ina238config.hpp
             inc/irManager.hpp
             inc/servoController.hpp
             inc/${TEST_FILE}.hpp
+            inc/remotetest.hpp
             )
 
 add_executable(remote_tester ${PROJECT_SOURCES})
