@@ -8,7 +8,7 @@
 
 using namespace std::chrono;
 
-void SolarCharge::runTest() override{
+void SolarCharge::runTest(){
     bool batteryFullFlag = false;
     time_t currentTime;
     struct tm *localTime;
