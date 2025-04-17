@@ -22,11 +22,11 @@ $ sudo apt install cmake
 
 ## Kullanım
 
-solarCharge testini build etmek için, cmake'in TEST_FILE değişkenine ilgili testin dosyasını geçmelisiniz.
+batteryChargeMonitoringTest testini build etmek için, cmake'in TEST_FILE değişkenine ilgili testin dosyasını geçmelisiniz.
 
 '''
 $ mkdir solar_charge_build
-$ cmake -DTEST_FILE=solarCharge -B solar_charge_build/
+$ cmake -DTEST_FILE=batteryChargeMonitoringTest -B solar_charge_build/
 $ cmake --build solar_charge_build/
 '''
 

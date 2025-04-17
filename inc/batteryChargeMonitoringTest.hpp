@@ -2,7 +2,7 @@
 
 #include "remotetest.hpp"
 
-class SolarCharge : public RemoteTest{
+class BatteryChargeMonitoringTest : public RemoteTest{
 public:
     void runTest() override;
 };

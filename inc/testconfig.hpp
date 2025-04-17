@@ -52,7 +52,7 @@ namespace testconfig{
     constexpr int SLEEP_SECONDS_WHEN_HIGH_BATT = 900; // in seconds
   }
 
-  namespace solarcharge{
+  namespace BCMT{
     /*
     1- SLEEP_SECONDS ara ile batarya voltajı ölçer
     2- batarya BATT_LOW_THRESHOULD 'ın altına düşerse, test sonlanır

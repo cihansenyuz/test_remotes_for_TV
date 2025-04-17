@@ -3,7 +3,7 @@
 #ifdef TEST_FILE_SOLARLESSIRBUTTONCLICK
 #include "inc/irSignalValidationTest.hpp"
 #elif defined(TEST_FILE_SOLARCHARGE)
-#include "inc/solarCharge.hpp"
+#include "inc/batteryChargeMonitoringTest.hpp"
 #elif defined(TEST_FILE_PUSHANDMEAS)
 #include "inc/batteryVoltageAndButtonTest.hpp"
 #endif
@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
     IrSignalValidationTest button_click_test;
     button_click_test.runTest();
 #elif defined(TEST_FILE_SOLARCHARGE)
-    SolarCharge solar_charge_test;
+    BatteryChargeMonitoringTest solar_charge_test;
     solar_charge_test.runTest();
 #elif defined(TEST_FILE_PUSHANDMEAS)
     BatteryVoltageAndButtonTest push_and_meas_test;
