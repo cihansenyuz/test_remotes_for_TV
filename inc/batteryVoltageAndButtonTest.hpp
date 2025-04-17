@@ -4,10 +4,10 @@
 #include "irManager.hpp"
 #include "servoController.hpp"
 
-class PushAndMeas : public RemoteTest{
+class BatteryVoltageAndButtonTest : public RemoteTest{
 public:
-    PushAndMeas();
-    ~PushAndMeas() override;
+    BatteryVoltageAndButtonTest();
+    ~BatteryVoltageAndButtonTest() override;
     void runTest() override;
 
 private:

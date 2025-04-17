@@ -1,4 +1,4 @@
-#include "pushAndMeas.hpp"
+#include "batteryVoltageAndButtonTest.hpp"
 #include "ina238config.hpp"
 #include "testconfig.hpp"
 
@@ -9,11 +9,11 @@
 #include <ctime>
 #include <unistd.h>
 
-void PushAndMeas::runTest(){
+void BatteryVoltageAndButtonTest::runTest(){
     time_t currentTime;
     struct tm *localTime;
 
-    while(timeOut != testconfig::pushandmeas::TEST_TIMEOUT_WHEN_LOW_BATT)
+    while(timeOut != testconfig::BVABT::TEST_TIMEOUT_WHEN_LOW_BATT)
     {
         time(&currentTime);
         localTime = localtime(&currentTime);
@@ -23,7 +23,7 @@ void PushAndMeas::runTest(){
 
         if (batteryLowFlag)
         {
-            sleep(testconfig::pushandmeas::SLEEP_SECONDS_WHEN_LOW_BATT);
+            sleep(testconfig::BVABT::SLEEP_SECONDS_WHEN_LOW_BATT);
             timeOut++;
         }
         else
@@ -59,7 +59,7 @@ void PushAndMeas::runTest(){
         if (buttonPress == 50)
         {
             buttonPress = 0;
-            sleep(testconfig::pushandmeas::SLEEP_SECONDS_WHEN_HIGH_BATT);
+            sleep(testconfig::BVABT::SLEEP_SECONDS_WHEN_HIGH_BATT);
             std::cout << "50 press completed...\n";
         }
     }
@@ -67,17 +67,17 @@ void PushAndMeas::runTest(){
     system("python3 ./graphTestResult.py --pam");
 }
 
-PushAndMeas::PushAndMeas(){
+BatteryVoltageAndButtonTest::BatteryVoltageAndButtonTest(){
     irManager = new IrManager(inaConfig::IR_PIN);
     servoController = new ServoController(inaConfig::SERVO_PIN);
 }
 
-PushAndMeas::~PushAndMeas(){
+BatteryVoltageAndButtonTest::~BatteryVoltageAndButtonTest(){
     delete irManager;
     delete servoController;
 }
 
-void PushAndMeas::saveRecordedMesuremants(struct tm* localTime, float &voltage){
+void BatteryVoltageAndButtonTest::saveRecordedMesuremants(struct tm* localTime, float &voltage){
         std::ofstream file(testconfig::TEST_RESULTS_FILE_NAME, std::ios::app);
         file << "Time";
         if(localTime->tm_hour < 10){

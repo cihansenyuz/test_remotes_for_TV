@@ -9,17 +9,17 @@
 void IrSignalValidationTest::runTest()
 {
     bool data[testconfig::IR::IR_DATA_SIZE];
-    testResults.reserve(testconfig::irSignalValidationTest::TOTAL_TEST_NO);
+    testResults.reserve(testconfig::IRSVT::TOTAL_TEST_NO);
     testResults.push_back(std::make_pair(testNo++, connectAndSenseVoltage()));
 
-    for( ; testNo <= testconfig::irSignalValidationTest::TOTAL_TEST_NO; testNo++)
+    for( ; testNo <= testconfig::IRSVT::TOTAL_TEST_NO; testNo++)
     {
         delay(40);
         servoController->pressButton();
         headerDurition = irManager->waitForHeaderBits();
         servoController->releaseButton();
         if((consecutiveErrorHeader + consecutiveErrorData)
-            == testconfig::irSignalValidationTest::TOTAL_ERROR_TO_FAIL_TEST){
+            == testconfig::IRSVT::TOTAL_ERROR_TO_FAIL_TEST){
             std::cout << "Test aborted...\n";
             testResults.push_back(std::make_pair(testNo, connectAndSenseVoltage()));
             break;
@@ -50,12 +50,12 @@ void IrSignalValidationTest::runTest()
             delay(2000);
         }
 
-        if(testNo % testconfig::irSignalValidationTest::TEST_QUANTITY_TO_MEASURE == 0){
+        if(testNo % testconfig::IRSVT::TEST_QUANTITY_TO_MEASURE == 0){
             std::cout << "Test #" << testNo << ", ";
             testResults.push_back(std::make_pair(testNo, connectAndSenseVoltage()));
         }
 
-        if(testResults.size() == testconfig::irSignalValidationTest::MEASUREMENT_QUANTITY_TO_SAVE)
+        if(testResults.size() == testconfig::IRSVT::MEASUREMENT_QUANTITY_TO_SAVE)
             saveRecordedMesuremants();
 
     }

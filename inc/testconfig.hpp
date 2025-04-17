@@ -23,7 +23,7 @@ namespace testconfig{
     constexpr int MAX_HEADER_DURATION = 8200;
   }
 
-  namespace irSignalValidationTest{
+  namespace IRSVT{
     /*
     1- her basımda header ve IR datasını kontrol eder
     2- peşpeşe TOTAL_ERROR_TO_FAIL_TEST kez yanlış okursa
@@ -37,7 +37,7 @@ namespace testconfig{
     constexpr int TOTAL_ERROR_TO_FAIL_TEST = 3;
   }
 
-  namespace pushandmeas{
+  namespace BVABT{
     /*
       1- Batarya bitene kadar 50 kez SLEEP_SECONDS_WHEN_HIGH_BATT
       sn ara ile basım yapar.
