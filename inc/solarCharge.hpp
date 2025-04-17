@@ -1,17 +1,12 @@
 #pragma once
 
-#include "ina238.hpp"
+#include "remotetest.hpp"
 
-class SolarCharge{
+class SolarCharge : public RemoteTest{
 public:
-    SolarCharge();
     ~SolarCharge();
-    void runTest();
+    void runTest() override;
     void runTest2();
-
-private:
-    Ina238 *sensor;
-    float connectAndSenseVoltage();
-    void saveRecordedMesuremants(struct tm* localTime, float &voltage);
+    
 };
 
