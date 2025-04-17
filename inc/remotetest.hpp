@@ -13,12 +13,16 @@
 
 #pragma once
 
+#include "ina238.hpp"
+
 class RemoteTest {
 public:
-    virtual ~RemoteTest() = default;
+    RemoteTest();
+    virtual ~RemoteTest();
     virtual void runTest() = 0;
 
 protected:
+    Ina238 *sensor;
     virtual float connectAndSenseVoltage();
     virtual void saveRecordedMesuremants(struct tm* localTime, float &voltage);
 };

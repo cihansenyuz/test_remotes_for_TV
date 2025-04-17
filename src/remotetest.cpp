@@ -3,6 +3,22 @@
 
 #include <wiringPi.h>
 
+RemoteTest::RemoteTest(){
+    if(wiringPiSetup())
+        std::cerr << "wiringPi setup fail" << std::endl;
+
+    sensor = new Ina238(inaConfig::DEVICE_ADDRESS, inaConfig::BUS_NUMBER);
+    sensor->setShuntCal(inaConfig::SHUNT_RESISTANCE, inaConfig::MAX_CURRENT);
+
+    pinMode(inaConfig::RELAY_PIN, OUTPUT);
+    digitalWrite(inaConfig::RELAY_PIN, HIGH);
+    sleep(1);
+}
+
+RemoteTest::~RemoteTest(){
+    delete sensor;
+}
+
 float connectAndSenseVoltage(){
     digitalWrite(inaConfig::RELAY_PIN, LOW);
     float result = sensor->voltage();
