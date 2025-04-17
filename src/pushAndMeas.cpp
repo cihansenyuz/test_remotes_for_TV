@@ -10,11 +10,6 @@
 #include <unistd.h>
 
 void PushAndMeas::runTest(){
-    int headerDurition = 0;
-    short consecutiveErrorHeader = 0;
-    int timeOut = 0;
-    int buttonPress = 0;
-    float voltage;
     time_t currentTime;
     struct tm *localTime;
 

@@ -9,7 +9,6 @@
 using namespace std::chrono;
 
 void SolarCharge::runTest(){
-    bool batteryFullFlag = false;
     time_t currentTime;
     struct tm *localTime;
 
@@ -29,7 +28,6 @@ void SolarCharge::runTest(){
 }
 
 void SolarCharge::runTest2(){
-    bool batteryFullFlag = false;
     time_t currentTime;
     struct tm *localTime;
 
