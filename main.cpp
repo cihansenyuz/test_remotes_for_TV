@@ -1,4 +1,5 @@
 #include <iostream>
+#include <QCoreApplication>
 
 #ifdef TEST_FILE_SOLARLESSIRBUTTONCLICK
 #include "inc/irSignalValidationTest.hpp"
@@ -9,6 +10,8 @@
 #endif
 
 int main(int argc, char **argv) {
+    QCoreApplication app(argc, argv);
+    
 #ifdef TEST_FILE_SOLARLESSIRBUTTONCLICK
     IrSignalValidationTest button_click_test;
     button_click_test.runTest();
@@ -23,5 +26,5 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
 #endif
 
-    return EXIT_SUCCESS;
+    return app.exec();
 }

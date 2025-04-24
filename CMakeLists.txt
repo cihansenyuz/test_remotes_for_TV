@@ -20,17 +20,17 @@ else()
 endif()
 
 if (NOT DEFINED TEST_FILE)
-# solarlessIrButtonClick
-# solarCharge
-# pushAndMeas
+# irSignalValidationTest
+# batteryChargeMonitoringTest
+# batteryVoltageAndButtonTest
 message(FATAL_ERROR "Testi içeren kaynak dosyasının adını belirtin\nÖrneğin: -DTEST_FILE=solarlessIrButtonClick")
 endif()
 
-if (TEST_FILE STREQUAL "solarlessIrButtonClick")
+if (TEST_FILE STREQUAL "irSignalValidationTest")
     add_compile_definitions(TEST_FILE_SOLARLESSIRBUTTONCLICK)
-elseif (TEST_FILE STREQUAL "solarCharge")
+elseif (TEST_FILE STREQUAL "batteryChargeMonitoringTest")
     add_compile_definitions(TEST_FILE_SOLARCHARGE)
-elseif (TEST_FILE STREQUAL "pushAndMeas")
+elseif (TEST_FILE STREQUAL "batteryVoltageAndButtonTest")
     add_compile_definitions(TEST_FILE_PUSHANDMEAS)
 else()
     message(FATAL_ERROR "belirtilen test dosyası cmake build'inde bulunamadı\nGeçerli dosyalar: solarlessIrButtonClick, solarCharge")
@@ -41,12 +41,14 @@ set(PROJECT_SOURCES main.cpp
             src/ina238.cpp
             src/irManager.cpp
             src/servoController.cpp
+            src/remotetest.cpp
 
+            inc/${TEST_FILE}.hpp
             inc/ina238.hpp
             inc/ina238config.hpp
             inc/irManager.hpp
             inc/servoController.hpp
-            inc/${TEST_FILE}.hpp
+            inc/remotetest.hpp
             )
 
 add_executable(remote_tester ${PROJECT_SOURCES})
