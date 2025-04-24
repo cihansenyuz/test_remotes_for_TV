@@ -70,6 +70,7 @@ IrSignalValidationTest::~IrSignalValidationTest(){
     delete irManager;
     delete servoController;
     system("python3 ./graphTestResult.py --sibc");
+    emit finished();
 }
 
 IrSignalValidationTest::IrSignalValidationTest(){

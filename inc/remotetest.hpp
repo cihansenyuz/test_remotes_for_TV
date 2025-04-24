@@ -14,12 +14,18 @@
 #pragma once
 
 #include "ina238.hpp"
+#include <QObject>
 
-class RemoteTest {
+class RemoteTest : public QObject
+{
+    Q_OBJECT
 public:
     RemoteTest();
     virtual ~RemoteTest();
     virtual void runTest() = 0;
+
+signals:
+    void finished();
 
 protected:
     Ina238 *sensor;
