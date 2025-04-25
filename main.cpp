@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
     
 #ifdef TEST_FILE_SOLARLESSIRBUTTONCLICK
     IrSignalValidationTest test;
-    QObject::connect(&test, &IrSignalValidationTest::finished, &app, &QCoreApplication::quit);
+    QObject::connect(&test, &IrSignalValidationTest::finished, &app, &QCoreApplication::quit, Qt::QueuedConnection);
     test.runTest();
 #elif defined(TEST_FILE_SOLARCHARGE)
     BatteryChargeMonitoringTest solar_charge_test;

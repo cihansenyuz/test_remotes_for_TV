@@ -9,7 +9,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-list(APPEND CMAKE_PREFIX_PATH "~/Qt/6.9.0/gcc_arm64/lib/cmake") # kendi setup'ına göre ayarla
+list(APPEND CMAKE_PREFIX_PATH "~/Qt/6.7.3/gcc_arm64/lib/cmake") # kendi setup'ına göre ayarla
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
 find_library(WIRINGPI_LIB wiringPi)
