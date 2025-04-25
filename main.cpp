@@ -12,15 +12,15 @@
 int main(int argc, char **argv) {
     QCoreApplication app(argc, argv);
     
-#ifdef TEST_FILE_SOLARLESSIRBUTTONCLICK
+#ifdef TEST_FILE_IRSVT
     IrSignalValidationTest test;
     QObject::connect(&test, &IrSignalValidationTest::finished, &app, &QCoreApplication::quit, Qt::QueuedConnection);
 
-#elif defined(TEST_FILE_SOLARCHARGE)
+#elif defined(TEST_FILE_BCMT)
     BatteryChargeMonitoringTest test;
     QObject::connect(&test, &BatteryChargeMonitoringTest::finished, &app, &QCoreApplication::quit, Qt::QueuedConnection);
     
-#elif defined(TEST_FILE_PUSHANDMEAS)
+#elif defined(TEST_FILE_BVABT)
     BatteryVoltageAndButtonTest test;
     QObject::connect(&test, &BatteryVoltageAndButtonTest::finished, &app, &QCoreApplication::quit, Qt::QueuedConnection);
     
