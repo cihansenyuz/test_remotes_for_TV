@@ -15,10 +15,11 @@ int main(int argc, char **argv) {
 #ifdef TEST_FILE_SOLARLESSIRBUTTONCLICK
     IrSignalValidationTest test;
     QObject::connect(&test, &IrSignalValidationTest::finished, &app, &QCoreApplication::quit, Qt::QueuedConnection);
-    test.runTest();
+
 #elif defined(TEST_FILE_SOLARCHARGE)
-    BatteryChargeMonitoringTest solar_charge_test;
-    solar_charge_test.runTest();
+    BatteryChargeMonitoringTest test;
+    QObject::connect(&test, &BatteryChargeMonitoringTest::finished, &app, &QCoreApplication::quit, Qt::QueuedConnection);
+    
 #elif defined(TEST_FILE_PUSHANDMEAS)
     BatteryVoltageAndButtonTest push_and_meas_test;
     push_and_meas_test.runTest();
@@ -27,5 +28,6 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
 #endif
 
+    test.runTest();
     return app.exec();
 }

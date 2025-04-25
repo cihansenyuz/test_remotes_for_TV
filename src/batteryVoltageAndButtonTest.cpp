@@ -63,8 +63,9 @@ void BatteryVoltageAndButtonTest::runTest(){
             std::cout << "50 press completed...\n";
         }
     }
-
-    system("python3 ./graphTestResult.py --pam");
+    
+    emit finished();
+    //system("python3 ./graphTestResult.py --pam");
 }
 
 BatteryVoltageAndButtonTest::BatteryVoltageAndButtonTest(){
