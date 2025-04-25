@@ -21,8 +21,9 @@ int main(int argc, char **argv) {
     QObject::connect(&test, &BatteryChargeMonitoringTest::finished, &app, &QCoreApplication::quit, Qt::QueuedConnection);
     
 #elif defined(TEST_FILE_PUSHANDMEAS)
-    BatteryVoltageAndButtonTest push_and_meas_test;
-    push_and_meas_test.runTest();
+    BatteryVoltageAndButtonTest test;
+    QObject::connect(&test, &BatteryVoltageAndButtonTest::finished, &app, &QCoreApplication::quit, Qt::QueuedConnection);
+    
 #else
     std::cerr << "Geçerli bir test dosyası belirtilmedi." << std::endl;
     return EXIT_FAILURE;
