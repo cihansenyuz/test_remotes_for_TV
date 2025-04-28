@@ -26,6 +26,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     std::unique_ptr<HardwareSettings> hardware_settings;
-    QString selectedTest;
+    std::unique_ptr<QDialog> test_settings;
+    QString selected_test;
     
 };

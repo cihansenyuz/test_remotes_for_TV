@@ -1,6 +1,8 @@
 #include "../../inc/gui/mainwindow.hpp"
 #include "../../res/ui/ui_mainwindow.h"
 #include "../../inc/testfactory.hpp"
+#include "../../inc/gui/testsettingfactory.hpp"
+#include "../../inc/gui/IRSVTsettingsdialog.hpp"
 #include <QButtonGroup>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -15,6 +17,14 @@ MainWindow::MainWindow(QWidget *parent)
                             hardware_settings = std::make_unique<HardwareSettings>(this);
                         }
                         hardware_settings->show();
+                    });
+
+    QObject::connect(ui->test_settings_action, &QAction::triggered,
+                    this, [this]() {
+                        test_settings = TestSettingsFactory::createTestSettings(selected_test);
+                        
+                        if(test_settings)
+                            test_settings->show();
                     });
     QObject::connect(ui->run_test_button, &QPushButton::clicked,
                     this, &MainWindow::onRunTestButtonClicked);
@@ -34,7 +44,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::onRunTestButtonClicked()
 {
-    auto test = TestFactory::createTest(selectedTest);
+    auto test = TestFactory::createTest(selected_test);
     if (test) {
         test->runTest();
         delete test; // Clean up after the test
@@ -52,16 +62,16 @@ void MainWindow::onTestSelectionChanged(int test_id)
 
     switch (test_id) {
         case 0:
-            selectedTest = "IrSignalValidationTest";
+            selected_test = "IrSignalValidationTest";
             break;
         case 1:
-            selectedTest = "BatteryVoltageAndButtonTest";
+            selected_test = "BatteryVoltageAndButtonTest";
             break;
         case 2:
-            selectedTest = "BatteryChargeMonitoringTest";
+            selected_test = "BatteryChargeMonitoringTest";
             break;
         default:
-            selectedTest.clear();
+            selected_test.clear();
             break;
     }
 }
