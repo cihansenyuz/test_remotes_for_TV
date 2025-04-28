@@ -52,6 +52,7 @@ set(PROJECT_SOURCES main.cpp
             inc/irManager.hpp
             inc/servoController.hpp
             inc/remotetest.hpp
+            inc/testfactory.hpp
 
             inc/gui/mainwindow.hpp
             inc/gui/hardwaresettings.hpp
