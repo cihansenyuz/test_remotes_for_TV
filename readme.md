@@ -28,16 +28,14 @@ Installer vasıtasıyla Qt 6.7.3 versiyonu veya gözüken en düşük versiyonu 
 
 # Kullanım
 
-batteryChargeMonitoringTest testini build etmek için, cmake'in TEST_FILE değişkenine ilgili testin dosyasını geçmelisiniz.
-
 ```
-$ mkdir solar_charge_build
-$ cmake -DTEST_FILE=batteryChargeMonitoringTest -B solar_charge_build/
-$ cmake --build solar_charge_build/
+$ mkdir build
+$ cmake -B build/
+$ cmake --build build/
 ```
 
-Testi başlatmak için
+Programı başlatmak için
 
 ```
-$ ./solar_charge_build/remote_tester
+$ ./build/remote_tester
 ```
