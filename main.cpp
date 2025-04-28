@@ -1,16 +1,19 @@
 #include <iostream>
-#include <QCoreApplication>
+#include <QApplication>
+#include "inc/gui/mainwindow.hpp"
 
-#ifdef TEST_FILE_SOLARLESSIRBUTTONCLICK
+#ifdef TEST_FILE_IRSVT
 #include "inc/irSignalValidationTest.hpp"
-#elif defined(TEST_FILE_SOLARCHARGE)
+#elif defined(TEST_FILE_BCMT)
 #include "inc/batteryChargeMonitoringTest.hpp"
-#elif defined(TEST_FILE_PUSHANDMEAS)
+#elif defined(TEST_FILE_BVABT)
 #include "inc/batteryVoltageAndButtonTest.hpp"
 #endif
 
 int main(int argc, char **argv) {
-    QCoreApplication app(argc, argv);
+    QApplication app(argc, argv);
+    MainWindow main_window;
+    main_window.show();
     
 #ifdef TEST_FILE_IRSVT
     IrSignalValidationTest test;
@@ -29,6 +32,6 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
 #endif
 
-    test.runTest();
+    //test.runTest();
     return app.exec();
 }

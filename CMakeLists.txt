@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 list(APPEND CMAKE_PREFIX_PATH "~/Qt/6.7.3/gcc_arm64/lib/cmake") # kendi setup'ına göre ayarla
-find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
 
 find_library(WIRINGPI_LIB wiringPi)
 if (WIRINGPI_LIB)
@@ -42,6 +42,8 @@ set(PROJECT_SOURCES main.cpp
             src/irManager.cpp
             src/servoController.cpp
             src/remotetest.cpp
+            
+            src/gui/mainwindow.cpp
 
             inc/${TEST_FILE}.hpp
             inc/ina238.hpp
@@ -49,11 +51,15 @@ set(PROJECT_SOURCES main.cpp
             inc/irManager.hpp
             inc/servoController.hpp
             inc/remotetest.hpp
+
+            inc/gui/mainwindow.hpp
+
+            res/ui/mainwindow.ui
             )
 
 add_executable(remote_tester ${PROJECT_SOURCES})
 
 target_include_directories(remote_tester PRIVATE inc)
 
-target_link_libraries(remote_tester PRIVATE ${WIRINGPI_LIB} Qt6::Core)
+target_link_libraries(remote_tester PRIVATE ${WIRINGPI_LIB} Qt6::Core Qt6::Widgets)
 
