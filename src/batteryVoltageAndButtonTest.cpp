@@ -13,7 +13,7 @@ void BatteryVoltageAndButtonTest::runTest(){
     time_t currentTime;
     struct tm *localTime;
 
-    while(timeOut != testconfig::BVABT::TEST_TIMEOUT_WHEN_LOW_BATT)
+    while(timeOut != TestSettings::BVABT::testTimeoutWhenLowBattery)
     {
         time(&currentTime);
         localTime = localtime(&currentTime);
@@ -23,7 +23,7 @@ void BatteryVoltageAndButtonTest::runTest(){
 
         if (batteryLowFlag)
         {
-            sleep(testconfig::BVABT::SLEEP_SECONDS_WHEN_LOW_BATT);
+            sleep(TestSettings::BVABT::sleepSecondsWhenLowBattery);
             timeOut++;
         }
         else
@@ -42,7 +42,8 @@ void BatteryVoltageAndButtonTest::runTest(){
             buttonPress = 0;
             continue;
         }
-        else if(headerDurition > testconfig::IR::MIN_HEADER_DURATION && headerDurition < testconfig::IR::MAX_HEADER_DURATION){
+        else if(headerDurition > TestSettings::IR::minHeaderDuration
+                && headerDurition < TestSettings::IR::maxHeaderDuration){
             batteryLowFlag = false;
             consecutiveErrorHeader = 0;
         }
@@ -59,7 +60,7 @@ void BatteryVoltageAndButtonTest::runTest(){
         if (buttonPress == 50)
         {
             buttonPress = 0;
-            sleep(testconfig::BVABT::SLEEP_SECONDS_WHEN_HIGH_BATT);
+            sleep(TestSettings::BVABT::sleepSecondsWhenHighBattery);
             std::cout << "50 press completed...\n";
         }
     }
@@ -79,7 +80,7 @@ BatteryVoltageAndButtonTest::~BatteryVoltageAndButtonTest(){
 }
 
 void BatteryVoltageAndButtonTest::saveRecordedMesuremants(struct tm* localTime, float &voltage){
-        std::ofstream file(testconfig::TEST_RESULTS_FILE_NAME, std::ios::app);
+        std::ofstream file(TestSettings::testResultsFileName, std::ios::app);
         file << "Time";
         if(localTime->tm_hour < 10){
             file << "0";

@@ -15,15 +15,15 @@ void BatteryChargeMonitoringTest::runTest(){
 
     float voltage = 3;
 
-    while(voltage >= testconfig::BCMT::BATT_LOW_THRESHOULD){
+    while(voltage >= TestSettings::BCMT::batteryLowThreshold){
         time(&currentTime);
         localTime = localtime(&currentTime);
         
         voltage = connectAndSenseVoltage();
         //std::cout << "Alerts: " << std::hex << sensor->getAlerts() << std::endl;
         saveRecordedMesuremants(localTime, voltage);
-        sleep(testconfig::BCMT::SLEEP_SECONDS);
+        sleep(TestSettings::BCMT::sleepSeconds);
     }
     
-    system("python3 ./graphTestResult.py --sc");
+    // system("python3 ./graphTestResult.py --sc");
 }

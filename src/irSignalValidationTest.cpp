@@ -8,28 +8,28 @@
 
 void IrSignalValidationTest::runTest()
 {
-    bool data[testconfig::IR::IR_DATA_SIZE];
-    testResults.reserve(testconfig::IRSVT::TOTAL_TEST_NO);
+    bool data[TestSettings::IR::dataSize];
+    testResults.reserve(TestSettings::IRSVT::totalTestCount);
     testResults.push_back(std::make_pair(testNo++, connectAndSenseVoltage()));
 
-    for( ; testNo <= testconfig::IRSVT::TOTAL_TEST_NO; testNo++)
+    for( ; testNo <= TestSettings::IRSVT::totalTestCount; testNo++)
     {
         delay(40);
         servoController->pressButton();
         headerDurition = irManager->waitForHeaderBits();
         servoController->releaseButton();
         if((consecutiveErrorHeader + consecutiveErrorData)
-            == testconfig::IRSVT::TOTAL_ERROR_TO_FAIL_TEST){
+            == TestSettings::IRSVT::totalErrorToFailTest){
             std::cout << "Test aborted...\n";
             testResults.push_back(std::make_pair(testNo, connectAndSenseVoltage()));
             break;
         }
-        else if(headerDurition > testconfig::IR::MIN_HEADER_DURATION
-                && headerDurition < testconfig::IR::MAX_HEADER_DURATION){
-            for(int i=0; i<testconfig::IR::IR_DATA_SIZE; i++)
+        else if(headerDurition > TestSettings::IR::maxHeaderDuration
+                && headerDurition < TestSettings::IR::maxHeaderDuration){
+            for(int i=0; i<TestSettings::IR::dataSize; i++)
                 data[i] = irManager->readBit();
 
-            if(irManager->checkPowerKey(data, testconfig::IR::IR_DATA_SIZE)){
+            if(irManager->checkPowerKey(data, TestSettings::IR::dataSize)){
                 consecutiveErrorHeader = 0;
                 consecutiveErrorData = 0;
             }
@@ -50,12 +50,12 @@ void IrSignalValidationTest::runTest()
             delay(2000);
         }
 
-        if(testNo % testconfig::IRSVT::TEST_QUANTITY_TO_MEASURE == 0){
+        if(testNo % TestSettings::IRSVT::testQuantityToMeasure == 0){
             std::cout << "Test #" << testNo << ", ";
             testResults.push_back(std::make_pair(testNo, connectAndSenseVoltage()));
         }
 
-        if(testResults.size() == testconfig::IRSVT::MEASUREMENT_QUANTITY_TO_SAVE)
+        if(testResults.size() == TestSettings::IRSVT::measurementQuantityToSave)
             saveRecordedMesuremants();
 
     }
@@ -80,7 +80,7 @@ IrSignalValidationTest::IrSignalValidationTest(){
 }
 
 void IrSignalValidationTest::saveRecordedMesuremants(){
-        std::ofstream file(testconfig::TEST_RESULTS_FILE_NAME, std::ios::app);
+        std::ofstream file(TestSettings::testResultsFileName, std::ios::app);
         for (auto &result : testResults)
             file << "test" << result.first << ": " << result.second << std::endl;
         file.close();
