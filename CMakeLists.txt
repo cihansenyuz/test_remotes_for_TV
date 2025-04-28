@@ -44,7 +44,7 @@ set(PROJECT_SOURCES main.cpp
             src/remotetest.cpp
             
             src/gui/mainwindow.cpp
-            #src/gui/hardwaresettings.cpp
+            src/gui/hardwaresettings.cpp
 
             inc/${TEST_FILE}.hpp
             inc/ina238.hpp
@@ -54,10 +54,10 @@ set(PROJECT_SOURCES main.cpp
             inc/remotetest.hpp
 
             inc/gui/mainwindow.hpp
-            #inc/gui/hardwaresettings.hpp
+            inc/gui/hardwaresettings.hpp
 
             res/ui/mainwindow.ui
-            #res/ui/hardwaresettings.ui
+            res/ui/hardwaresettings.ui
             )
 
 add_executable(remote_tester ${PROJECT_SOURCES})

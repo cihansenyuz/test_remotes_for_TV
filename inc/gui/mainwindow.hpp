@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QMainWindow>
+#include <memory>
+#include "gui/hardwaresettings.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,5 +21,6 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    std::unique_ptr<HardwareSettings> hardware_settings;
     
 };

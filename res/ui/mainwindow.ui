@@ -25,12 +25,18 @@
    </property>
    <widget class="QMenu" name="menuDonan_m_Ayarlar">
     <property name="title">
-     <string>Donanım Ayarları</string>
+     <string>Ayarlar</string>
     </property>
+    <addaction name="hardware_settings_action"/>
    </widget>
    <addaction name="menuDonan_m_Ayarlar"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="hardware_settings_action">
+   <property name="text">
+    <string>Donanım ayarları...</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

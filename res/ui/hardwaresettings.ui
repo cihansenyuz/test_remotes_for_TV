@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>hardware_settings_dialog</class>
- <widget class="QDialog" name="hardware_settings_dialog">
+ <class>HardwareSettings</class>
+ <widget class="QDialog" name="HardwareSettings">
   <property name="windowModality">
    <enum>Qt::ApplicationModal</enum>
   </property>
@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>392</height>
+    <height>430</height>
    </rect>
   </property>
   <property name="windowTitle">
