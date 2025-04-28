@@ -30,6 +30,7 @@ set(PROJECT_SOURCES main.cpp
             
             src/gui/mainwindow.cpp
             src/gui/hardwaresettings.cpp
+            src/gui/IRSVTsettingsdialog.cpp
 
             inc/irSignalValidationTest.hpp
             inc/batteryChargeMonitoringTest.hpp
@@ -43,9 +44,11 @@ set(PROJECT_SOURCES main.cpp
 
             inc/gui/mainwindow.hpp
             inc/gui/hardwaresettings.hpp
+            inc/gui/IRSVTsettingsdialog.hpp
 
             res/ui/mainwindow.ui
             res/ui/hardwaresettings.ui
+            res/ui/IRSVTsettingsdialog.ui
             )
 
 add_executable(remote_tester ${PROJECT_SOURCES})
