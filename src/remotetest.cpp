@@ -10,11 +10,13 @@ RemoteTest::RemoteTest(){
     if(wiringPiSetup())
         std::cerr << "wiringPi setup fail" << std::endl;
 
-    sensor = new Ina238(inaConfig::DEVICE_ADDRESS, inaConfig::BUS_NUMBER);
-    sensor->setShuntCal(inaConfig::SHUNT_RESISTANCE, inaConfig::MAX_CURRENT);
+    sensor = new Ina238(INA238Config::getInstance().getDeviceAddress(),
+                        INA238Config::getInstance().getBusNumber());
+    sensor->setShuntCal(INA238Config::getInstance().getShuntResistance(),
+                        INA238Config::getInstance().getMaxCurrent());
 
-    pinMode(inaConfig::RELAY_PIN, OUTPUT);
-    digitalWrite(inaConfig::RELAY_PIN, HIGH);
+    pinMode(INA238Config::getInstance().getRelayPin(), OUTPUT);
+    digitalWrite(INA238Config::getInstance().getRelayPin(), HIGH);
     sleep(1);
 }
 
@@ -23,10 +25,10 @@ RemoteTest::~RemoteTest(){
 }
 
 float RemoteTest::connectAndSenseVoltage(){
-    digitalWrite(inaConfig::RELAY_PIN, LOW);
+    digitalWrite(INA238Config::getInstance().getRelayPin(), LOW);
     delay(50);
     float calculated_voltage = sensor->voltage();
-    digitalWrite(inaConfig::RELAY_PIN, HIGH);
+    digitalWrite(INA238Config::getInstance().getRelayPin(), HIGH);
     delay(50);
     return calculated_voltage;
 }

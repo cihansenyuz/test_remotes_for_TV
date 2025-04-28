@@ -46,7 +46,7 @@ void IrSignalValidationTest::runTest()
             totalErrorHeader++;
             delete irManager;
             delay(200);
-            irManager = new IrManager(inaConfig::IR_PIN);
+            irManager = new IrManager(INA238Config::getInstance().getIRPin());
             delay(2000);
         }
 
@@ -75,8 +75,8 @@ IrSignalValidationTest::~IrSignalValidationTest(){
 }
 
 IrSignalValidationTest::IrSignalValidationTest(){
-    irManager = new IrManager(inaConfig::IR_PIN);
-    servoController = new ServoController(inaConfig::SERVO_PIN);
+    irManager = new IrManager(INA238Config::getInstance().getIRPin());
+    servoController = new ServoController(INA238Config::getInstance().getServoPin());
 }
 
 void IrSignalValidationTest::saveRecordedMesuremants(){
