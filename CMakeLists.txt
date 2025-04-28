@@ -37,7 +37,9 @@ else()
 endif()
 
 set(PROJECT_SOURCES main.cpp
-            src/${TEST_FILE}.cpp
+            src/irSignalValidationTest.cpp
+            src/batteryChargeMonitoringTest.cpp
+            src/batteryVoltageAndButtonTest.cpp
             src/ina238.cpp
             src/irManager.cpp
             src/servoController.cpp
@@ -46,7 +48,9 @@ set(PROJECT_SOURCES main.cpp
             src/gui/mainwindow.cpp
             src/gui/hardwaresettings.cpp
 
-            inc/${TEST_FILE}.hpp
+            inc/irSignalValidationTest.hpp
+            inc/batteryChargeMonitoringTest.hpp
+            inc/batteryVoltageAndButtonTest.hpp
             inc/ina238.hpp
             inc/ina238config.hpp
             inc/irManager.hpp
