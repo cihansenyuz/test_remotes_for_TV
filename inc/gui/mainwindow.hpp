@@ -21,9 +21,11 @@ public:
 
 private slots:
     void onRunTestButtonClicked();
+    void onTestSelectionChanged(int test_id);
 
 private:
     Ui::MainWindow *ui;
     std::unique_ptr<HardwareSettings> hardware_settings;
+    QString selectedTest;
     
 };
