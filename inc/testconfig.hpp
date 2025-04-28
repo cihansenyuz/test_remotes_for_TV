@@ -2,9 +2,9 @@
   ******************************************************************************
   * @file    testconfig.hpp
   * @authors Cihan Senyuz
-  * @date    16.04.2025
+  * @date    28.04.2025
   * @brief   Header for configrable variables of test modules
-  *                 This file contains constant variables for test modules.
+  *                 This class contains variables for test module parameters.
   *          User must define the values of these variables according to the test
   *          requirements.
   *                 
@@ -14,32 +14,46 @@
 
 #pragma once
 
-namespace testconfig{
-  constexpr const char* TEST_RESULTS_FILE_NAME = "testResults.txt";
+class TestSettings {
+private:
+    TestSettings() = default;
+    TestSettings(const TestSettings&) = delete;
+    TestSettings& operator=(const TestSettings&) = delete;
 
-  namespace IR{
-    constexpr int IR_DATA_SIZE = 24; /** toplam IR datası boyutu */
-    constexpr int MIN_HEADER_DURATION = 7800;
-    constexpr int MAX_HEADER_DURATION = 8200;
-  }
+public:
+    static TestSettings& getInstance() {
+        static TestSettings instance;
+        return instance;
+    }
 
-  namespace IRSVT{ // IrSignalValidationTest
+    // General
+    const char* testResultsFileName = "testResults.txt";
+
+    // IR
+    struct IR {
+        int dataSize = 24;
+        int minHeaderDuration = 7800;
+        int maxHeaderDuration = 8200;
+    };
+
+    // IR Signal Validation Test
     /*
-    1- Her buton basımında IR sinyalinin header (başlık) kısmını ve IR verisini kontrol eder.
-    2- Eğer arka arkaya TOTAL_ERROR_TO_FAIL_TEST kez yanlış okuma yapılırsa, testi sonlandırır.
-    3- TEST_QUANTITY_TO_MEASURE testte bir, voltaj ölçümü yapar ve sonucu kaydeder.
-    4- Her MEASUREMENT_QUANTITY_TO_SAVE ölçümde bir, hafızadaki test sonuçlarını 
-       TEST_RESULTS_FILE_NAME dosyasına kaydeder.
-    5- Toplamda TOTAL_TEST_NO test gerçekleştirilir. Bu değer TEST_QUANTITY_TO_MEASURE 
-       ile tam bölünebilir olmalıdır.
+      1- Her buton basımında IR sinyalinin header (başlık) kısmını ve IR verisini kontrol eder.
+      2- Eğer arka arkaya TOTAL_ERROR_TO_FAIL_TEST kez yanlış okuma yapılırsa, testi sonlandırır.
+      3- TEST_QUANTITY_TO_MEASURE testte bir, voltaj ölçümü yapar ve sonucu kaydeder.
+      4- Her MEASUREMENT_QUANTITY_TO_SAVE ölçümde bir, hafızadaki test sonuçlarını 
+        TEST_RESULTS_FILE_NAME dosyasına kaydeder.
+      5- Toplamda TOTAL_TEST_NO test gerçekleştirilir. Bu değer TEST_QUANTITY_TO_MEASURE 
+        ile tam bölünebilir olmalıdır.
     */
-    constexpr int TOTAL_TEST_NO = 100000; // must be integer multiple of TEST_QUANTITY_TO_MEASURE
-    constexpr int TEST_QUANTITY_TO_MEASURE = 200;
-    constexpr int MEASUREMENT_QUANTITY_TO_SAVE = 20;
-    constexpr int TOTAL_ERROR_TO_FAIL_TEST = 3;
-  }
+    struct IRSVT {
+        int totalTestCount = 100000;
+        int testQuantityToMeasure = 200;
+        int measurementQuantityToSave = 20;
+        int totalErrorToFailTest = 3;
+    };
 
-  namespace BVABT{ // BatteryVoltageAndButtonTest
+    // Battery Voltage and Button Test
     /*
       1- Batarya yeterli seviyedeyken, her 50 buton basımında bir 
          SLEEP_SECONDS_WHEN_HIGH_BATT kadar süre bekler.
@@ -50,17 +64,20 @@ namespace testconfig{
          okuma yapılamazsa, testi sonlandırır. Eğer okuma yapılabilirse, 
          tekrar 1. adıma döner.
     */
-    constexpr int SLEEP_SECONDS_WHEN_LOW_BATT = 900; // in seconds
-    constexpr int TEST_TIMEOUT_WHEN_LOW_BATT = 24; // times SLEEP_SECONDS_WHEN_LOW_BATT
-    constexpr int SLEEP_SECONDS_WHEN_HIGH_BATT = 900; // in seconds
-  }
+    struct BVABT {
+        int sleepSecondsWhenLowBattery = 900;
+        int testTimeoutWhenLowBattery = 24;
+        int sleepSecondsWhenHighBattery = 900;
+    };
 
-  namespace BCMT{ // BatteryChargeMonitoringTest
+    // Battery Charge Monitoring Test
     /*
-    1- Her SLEEP_SECONDS ara ile batarya voltajını ölçer.
-    2- Eğer batarya voltajı BATT_LOW_THRESHOULD değerinin altına düşerse, test sonlanır.
+      1- Her SLEEP_SECONDS ara ile batarya voltajını ölçer.
+      2- Eğer batarya voltajı BATT_LOW_THRESHOULD değerinin altına düşerse, test sonlanır.
     */
-    constexpr int SLEEP_SECONDS = 3600;
-    constexpr float BATT_LOW_THRESHOULD = 2.66f;
-  }
-}
+    struct BCMT {
+      
+        int sleepSeconds = 3600;
+        float batteryLowThreshold = 2.66f;
+    };
+};
