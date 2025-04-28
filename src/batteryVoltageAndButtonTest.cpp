@@ -51,7 +51,7 @@ void BatteryVoltageAndButtonTest::runTest(){
             consecutiveErrorHeader++;
             delete irManager;
             delay(200);
-            irManager = new IrManager(inaConfig::IR_PIN);
+            irManager = new IrManager(INA238Config::getInstance().getIRPin());
             delay(1000);
         }
         
@@ -69,8 +69,8 @@ void BatteryVoltageAndButtonTest::runTest(){
 }
 
 BatteryVoltageAndButtonTest::BatteryVoltageAndButtonTest(){
-    irManager = new IrManager(inaConfig::IR_PIN);
-    servoController = new ServoController(inaConfig::SERVO_PIN);
+    irManager = new IrManager(INA238Config::getInstance().getIRPin());
+    servoController = new ServoController(INA238Config::getInstance().getServoPin());
 }
 
 BatteryVoltageAndButtonTest::~BatteryVoltageAndButtonTest(){
