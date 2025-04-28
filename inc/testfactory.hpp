@@ -1,5 +1,10 @@
 #pragma once
 
+#include "remotetest.hpp"
+#include "irSignalValidationTest.hpp"
+#include "batteryChargeMonitoringTest.hpp"
+#include "batteryVoltageAndButtonTest.hpp"
+
 class TestFactory{
 public:
     static RemoteTest* createTest(const QString &testName){
