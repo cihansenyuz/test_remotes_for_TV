@@ -19,6 +19,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void onRunTestButtonClicked();
+
 private:
     Ui::MainWindow *ui;
     std::unique_ptr<HardwareSettings> hardware_settings;
