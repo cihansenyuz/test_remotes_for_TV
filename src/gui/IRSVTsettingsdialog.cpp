@@ -20,14 +20,14 @@ IRSVTSettingsDialog::~IRSVTSettingsDialog()
 }
 
 void IRSVTSettingsDialog::onSaveButtonClicked(){
-    TestSettings::getInstance().IR.dataSize = ui->dataSizeSpinBox->getValue();
-    TestSettings::getInstance().IR.minHeaderDuration = ui->minHeaderDurationSpinBox->getValue();
-    TestSettings::getInstance().IR.maxHeaderDuration = ui->maxHeaderDurationSpinBox->getValue();
+    TestSettings::getInstance().IR.dataSize = ui->dataSizeSpinBox->value();
+    TestSettings::getInstance().IR.minHeaderDuration = ui->minHeaderDurationSpinBox->value();
+    TestSettings::getInstance().IR.maxHeaderDuration = ui->maxHeaderDurationSpinBox->value();
 
-    TestSettings::getInstance().IRSVT.totalTestCount = ui->totalTestCountSpinBox->getValue();
-    TestSettings::getInstance().IRSVT.testQuantityToMeasure = ui->testQuantityToMeasureSpinBox->getValue();
-    TestSettings::getInstance().IRSVT.measurementQuantityToSave = ui->measurementQuantityToSaveSpinBox->getValue();
-    TestSettings::getInstance().IRSVT.totalErrorToFailTest = ui->totalErrorToFailTestSpinBox->getValue();
+    TestSettings::getInstance().IRSVT.totalTestCount = ui->totalTestCountSpinBox->value();
+    TestSettings::getInstance().IRSVT.testQuantityToMeasure = ui->testQuantityToMeasureSpinBox->value();
+    TestSettings::getInstance().IRSVT.measurementQuantityToSave = ui->measurementQuantityToSaveSpinBox->value();
+    TestSettings::getInstance().IRSVT.totalErrorToFailTest = ui->totalErrorToFailTestSpinBox->value();
 
     accept();
 }

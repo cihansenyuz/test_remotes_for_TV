@@ -59,16 +59,23 @@ void MainWindow::onTestSelectionChanged(int test_id)
         ui->run_test_button->setEnabled(true);
         ui->test_settings_action->setEnabled(true);
     }
-
+    
     switch (test_id) {
         case 0:
             selected_test = "IrSignalValidationTest";
+            ui->test_description->setText("1- Her buton basımında IR sinyalinin header (başlık) kısmını ve IR verisini kontrol eder.\n"
+            "2- Eğer arka arkaya max hata adeti kez yanlış okuma yapılırsa, testi sonlandırır.\n"
+            "3- Belirli adet testte bir, voltaj ölçümü yapar ve sonucu kaydeder.\n"
+            "4- Belirli adet ölçümde bir, hafızadaki test sonuçlarını txt dosyasına kaydeder.\n"
+            "5- Toplamda toplam test sayısı kadar basım gerçekleştirilir.");
             break;
         case 1:
             selected_test = "BatteryVoltageAndButtonTest";
+            ui->test_description->setText("test-2 tanımı");
             break;
         case 2:
             selected_test = "BatteryChargeMonitoringTest";
+            ui->test_description->setText("test-3 tanımı");
             break;
         default:
             selected_test.clear();
