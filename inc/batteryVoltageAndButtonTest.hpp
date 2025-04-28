@@ -5,6 +5,8 @@
 #include "servoController.hpp"
 
 class BatteryVoltageAndButtonTest : public RemoteTest{
+    Q_OBJECT
+    
 public:
     BatteryVoltageAndButtonTest();
     ~BatteryVoltageAndButtonTest() override;

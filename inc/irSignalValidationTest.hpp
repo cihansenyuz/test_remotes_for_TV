@@ -7,10 +7,12 @@
 #include <vector>
 
 class IrSignalValidationTest : public RemoteTest {
+    Q_OBJECT
+    
 public:
     IrSignalValidationTest();
     ~IrSignalValidationTest();
-    void runTest();
+    void runTest() override;
 
 private:
     IrManager* irManager;
