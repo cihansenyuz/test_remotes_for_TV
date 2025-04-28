@@ -75,7 +75,6 @@ IrSignalValidationTest::~IrSignalValidationTest(){
 }
 
 IrSignalValidationTest::IrSignalValidationTest(){
-    sensor = new Ina238(inaConfig::DEVICE_ADDRESS, inaConfig::BUS_NUMBER);
     irManager = new IrManager(inaConfig::IR_PIN);
     servoController = new ServoController(inaConfig::SERVO_PIN);
 }
