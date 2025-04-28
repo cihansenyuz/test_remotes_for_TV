@@ -104,7 +104,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QDoubleSpinBox" name="doubleSpinBox">
+         <widget class="QDoubleSpinBox" name="shunt_resistance_spinbox">
           <property name="decimals">
            <number>3</number>
           </property>
@@ -125,7 +125,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+         <widget class="QDoubleSpinBox" name="max_current_spinbox">
           <property name="decimals">
            <number>3</number>
           </property>

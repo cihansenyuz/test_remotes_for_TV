@@ -18,6 +18,10 @@ public:
     HardwareSettings(QWidget *parent = nullptr);
     ~HardwareSettings();
 
+private slots:
+    void onSaveButtonClicked();
+    void onCancelButtonClicked();
+
 private:
     Ui::HardwareSettings *ui;
     
