@@ -81,8 +81,11 @@
           <property name="minimum">
            <number>1</number>
           </property>
-          <property name="singleStep">
+          <property name="maximum">
            <number>2</number>
+          </property>
+          <property name="singleStep">
+           <number>1</number>
           </property>
           <property name="value">
            <number>1</number>
