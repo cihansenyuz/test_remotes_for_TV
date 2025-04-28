@@ -34,7 +34,7 @@ public:
         int dataSize = 24;
         int minHeaderDuration = 7800;
         int maxHeaderDuration = 8200;
-    };
+    } IR;
 
     // IR Signal Validation Test
     /*
@@ -51,7 +51,7 @@ public:
         int testQuantityToMeasure = 200;
         int measurementQuantityToSave = 20;
         int totalErrorToFailTest = 3;
-    };
+    } IRSVT;
 
     // Battery Voltage and Button Test
     /*
@@ -68,7 +68,7 @@ public:
         int sleepSecondsWhenLowBattery = 900;
         int testTimeoutWhenLowBattery = 24;
         int sleepSecondsWhenHighBattery = 900;
-    };
+    } BVABT;
 
     // Battery Charge Monitoring Test
     /*
@@ -76,8 +76,7 @@ public:
       2- Eğer batarya voltajı BATT_LOW_THRESHOULD değerinin altına düşerse, test sonlanır.
     */
     struct BCMT {
-      
         int sleepSeconds = 3600;
         float batteryLowThreshold = 2.66f;
-    };
+    } BCMT;
 };

@@ -34,7 +34,7 @@ float RemoteTest::connectAndSenseVoltage(){
 }
 
 void RemoteTest::saveRecordedMesuremants(struct tm* localTime, float &voltage){
-    std::ofstream file(testconfig::TEST_RESULTS_FILE_NAME, std::ios::app);
+    std::ofstream file(TestSettings::getInstance().testResultsFileName, std::ios::app);
     file << "Time";
     if(localTime->tm_hour < 10){
         file << "0";
