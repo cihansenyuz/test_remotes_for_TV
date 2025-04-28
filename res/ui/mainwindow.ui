@@ -11,36 +11,9 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Kumanda Test Uygulaması</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>330</x>
-      <y>160</y>
-      <width>68</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>DENEME</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>420</x>
-      <y>240</y>
-      <width>99</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Deneme</string>
-    </property>
-   </widget>
-  </widget>
+  <widget class="QWidget" name="centralwidget"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -50,6 +23,12 @@
      <height>28</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuDonan_m_Ayarlar">
+    <property name="title">
+     <string>Donanım Ayarları</string>
+    </property>
+   </widget>
+   <addaction name="menuDonan_m_Ayarlar"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

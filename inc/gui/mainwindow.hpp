@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QMainWindow>
-#include "../../res/ui/ui_mainwindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
