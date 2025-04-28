@@ -44,6 +44,7 @@ set(PROJECT_SOURCES main.cpp
 
             inc/gui/mainwindow.hpp
             inc/gui/hardwaresettings.hpp
+            inc/gui/testsettingfactory.hpp
             inc/gui/IRSVTsettingsdialog.hpp
 
             res/ui/mainwindow.ui
