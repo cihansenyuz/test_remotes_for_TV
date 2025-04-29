@@ -26,6 +26,7 @@ public:
 
 signals:
     void finished();
+    void messageFeed(const QString &message);
 
 protected:
     Ina238 *sensor;

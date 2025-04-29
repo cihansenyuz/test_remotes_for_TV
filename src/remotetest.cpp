@@ -8,7 +8,9 @@
 
 RemoteTest::RemoteTest(){
     if(wiringPiSetup())
-        std::cerr << "wiringPi setup fail" << std::endl;
+        emit messageFeed("hata: wiringPi kurulumu hata verdi");
+    else
+        emit messageFeed("bilgi: wiringPi kurulumu başarılı");
 
     sensor = new Ina238(INA238Config::getInstance().getDeviceAddress(),
                         INA238Config::getInstance().getBusNumber());

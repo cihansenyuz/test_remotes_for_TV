@@ -46,6 +46,9 @@ void MainWindow::onRunTestButtonClicked()
 {
     auto test = TestFactory::createTest(selected_test);
     if (test) {
+        QObject::connect(test, &RemoteTest::messageFeed,
+                        this, &MainWindow::onTestMessageRecieved);
+
         test->runTest();
         delete test; // Clean up after the test
     } else {
@@ -81,4 +84,8 @@ void MainWindow::onTestSelectionChanged(int test_id)
             selected_test.clear();
             break;
     }
+}
+
+void MainWindow::onTestMessageRecieved(const QString &message){
+    ui->test_message_browser->append(message);
 }
