@@ -17,7 +17,7 @@ Ina238::Ina238(uint8_t addr, uint8_t busNum) {
     writeWordData(fd, CONFIG, 0x8000);
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
     if(!checkDevice())
-        return;
+        throw std::runtime_error{"hata: INA238 modül cevap vermiyor"};
 
     /*
     ADC_CONFIG reg: 1111 1011 0110 1000

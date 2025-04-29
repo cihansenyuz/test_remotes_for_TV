@@ -12,8 +12,16 @@ RemoteTest::RemoteTest(){
     else
         emit messageFeed("bilgi: wiringPi kurulumu başarılı");
 
-    sensor = new Ina238(INA238Config::getInstance().getDeviceAddress(),
-                        INA238Config::getInstance().getBusNumber());
+    try{
+        sensor = new Ina238(INA238Config::getInstance().getDeviceAddress(),
+        INA238Config::getInstance().getBusNumber());
+    }
+    catch(const std::exception &e){
+        emit messageFeed(e.what());
+        emit messageFeed("bilgi: test erken sonlandırıldı");
+        return;
+    }
+
     sensor->setShuntCal(INA238Config::getInstance().getShuntResistance(),
                         INA238Config::getInstance().getMaxCurrent());
 
