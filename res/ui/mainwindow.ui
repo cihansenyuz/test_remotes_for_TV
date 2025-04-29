@@ -14,54 +14,58 @@
    <string>Kumanda Test Uygulaması</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QFormLayout" name="formLayout">
-    <item row="0" column="0">
-     <widget class="QGroupBox" name="test_selection_box">
-      <property name="title">
-       <string>Test Seçimi</string>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QRadioButton" name="IrSignalValidationTestSelection">
-         <property name="text">
-          <string>IrSignalValidationTest</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="BatteryVoltageAndButtonTestSelection">
-         <property name="text">
-          <string>BatteryVoltageAndButtonTest</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="BatteryChargeMonitoringTestSelection">
-         <property name="text">
-          <string>BatteryChargeMonitoringTest</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,2">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QGroupBox" name="test_selection_box">
+        <property name="title">
+         <string>Test Seçimi</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QRadioButton" name="IrSignalValidationTestSelection">
+           <property name="text">
+            <string>IrSignalValidationTest</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="BatteryVoltageAndButtonTestSelection">
+           <property name="text">
+            <string>BatteryVoltageAndButtonTest</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="BatteryChargeMonitoringTestSelection">
+           <property name="text">
+            <string>BatteryChargeMonitoringTest</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="run_test_button">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Testi Başlat</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
-    <item row="0" column="1">
-     <widget class="QPushButton" name="run_test_button">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Testi Başlat</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
+    <item>
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
        <string>Testin Tanımı</string>
@@ -77,8 +81,17 @@
       </layout>
      </widget>
     </item>
-    <item row="1" column="1">
-     <widget class="QTextBrowser" name="test_message_browser"/>
+    <item>
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="title">
+       <string>Testin Durumuna Dair Mesajlar</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QTextBrowser" name="test_message_browser"/>
+       </item>
+      </layout>
+     </widget>
     </item>
    </layout>
   </widget>
